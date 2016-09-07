@@ -36,7 +36,7 @@
         <c:if test="${role.role.equals('admin')}">
             <tr>
                 <td>
-                    <a href="<c:url value="/nocturne/managerp"/>"> <fmt:message
+                    <a href="<c:url value="/nocturne/manageUser"/>"> <fmt:message
                             key="caption.menu.manageUser" />
                     </a>
                 </td>
