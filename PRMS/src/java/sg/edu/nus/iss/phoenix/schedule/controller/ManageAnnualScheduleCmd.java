@@ -12,23 +12,24 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduleDelegate;
-import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.entity.Year;
 
 /**
  *
  * @author linby
  */
-@Action("manageschedule")
-public class ManageScheduleCmd implements Perform{
+@Action("manageyear")
+public class ManageAnnualScheduleCmd implements Perform{
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ReviewSelectScheduleDelegate del = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> data = del.reviewSelectProgramSlot();
-        req.setAttribute("schedulelist", data);
-        return "/pages/crudschedule.jsp";
+        ReviewSelectScheduleDelegate delegate = new ReviewSelectScheduleDelegate();
+        List<Year> years = delegate.reviewExistingYear();
+        if(years!=null){
+            req.setAttribute("years", years);
+        }
+        return "/pages/cryear.jsp";
     }
     
 }

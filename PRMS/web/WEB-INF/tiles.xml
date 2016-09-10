@@ -30,4 +30,13 @@
         <definition name="cruduserPage" extends="homePage">
 		<put-attribute name="body" value="/pages/tilepages/cruduser.jsp" />
 	</definition>
+        <definition name="cryearPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/cryear.jsp" />
+	</definition>
+         <definition name="createyearPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/createyear.jsp" />
+	</definition>
+        <definition name="createprogramslotPage" extends="homePage">
+		<put-attribute name="body" value="/pages/tilepages/createprogramslot.jsp" />
+	</definition>
 </tiles-definitions>
