@@ -5,6 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.Year;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
 
@@ -13,9 +14,24 @@ import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
  * @author linby
  */
 public class ScheduleDelegate {
+    private ScheduleService service;
     
+    public ScheduleDelegate(){
+        service = new ScheduleService();
+    }
     public void processCreateYear(Year valueObject) {
-        ScheduleService service = new ScheduleService();
         service.processCreateYear(valueObject);
+    }
+    
+    public void processCreateProgramSlot(ProgramSlot valueObject){
+        service.processCreateProgramSlot(valueObject);
+    }
+    
+    public void processDeleteProgramSlot(ProgramSlot valueObject){
+        service.processDeleteProgramSlot(valueObject);
+    }
+    
+    public void processUpdateProgramSlot(ProgramSlot valueObject){
+        service.processUpdateProgramSlot(valueObject);
     }
 }

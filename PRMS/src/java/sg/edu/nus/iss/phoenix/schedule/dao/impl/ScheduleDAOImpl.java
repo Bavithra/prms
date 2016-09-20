@@ -30,6 +30,32 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     Connection connection;
 
     @Override
+    public void create(ProgramSlot valueObject) throws SQLException {
+        String sql = "";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            sql = "INSERT INTO `program-slot` (`dateOfProgram`, `duration`, `startTime`,`presenter`,`producer`,`program-name`) VALUES (?,?,?,?,?,?); ";
+            stmt = connection.prepareStatement(sql);
+            stmt.setDate(1, new java.sql.Date(valueObject.getDateOfProgram().getTime()));
+            stmt.setTime(2, valueObject.getDuration());
+            stmt.setTime(3, valueObject.getStartTime());
+            stmt.setString(4, valueObject.getPresenter());
+            stmt.setString(5, valueObject.getProducer());
+            stmt.setString(6, valueObject.getProgramName());
+            int rowcount = stmt.executeUpdate();
+            if (rowcount != 1) {
+                throw new SQLException("PrimaryKey Error when insert DB!");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+    }
+
+    @Override
     public List<ProgramSlot> load(ProgramSlot valueObject) throws NotFoundException, SQLException {
         if (valueObject.getDateOfProgram() == null) {
             // System.out.println("Can not select without Primary-Key!");
@@ -67,18 +93,20 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     }
 
     @Override
-    public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        String sql = "UPDATE `program-slot` SET `dration` = ?, `dateOfProgram` = ?, 'startTime'=?, 'program-name'=?, 'presenter'=?, 'producer'=? WHERE (`dateOfProgram` = ? and 'startTime'= ? ); ";
+    public void save(ProgramSlot valueObject) throws SQLException,NotFoundException {
+        String sql = "UPDATE `program-slot` SET `duration` = ?, `dateOfProgram` = ?, `startTime`=?, `program-name`=?, `presenter`=?, `producer`=? WHERE `id` = ? ; ";
         PreparedStatement stmt = null;
         openConnection();
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setTime(1, valueObject.getDuration());
-            stmt.setDate(2, valueObject.getDateOfProgram());
+            stmt.setDate(2, new java.sql.Date(valueObject.getDateOfProgram().getTime()));
             stmt.setTime(3, valueObject.getStartTime());
             stmt.setString(4, valueObject.getProgramName());
-            stmt.setString(5,valueObject.getPresenter());
+            stmt.setString(5, valueObject.getPresenter());
             stmt.setString(6, valueObject.getProducer());
+            //condition parameter
+            stmt.setInt(7, valueObject.getId());
             int rowcount = stmt.executeUpdate();
             if (rowcount == 0) {
                 // System.out.println("Object could not be saved! (PrimaryKey not found)");
@@ -99,14 +127,13 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     }
 
     @Override
-    public void delete(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        String sql = "DELETE FROM `program-slot` WHERE 'dateOfProgram' = ? and 'startTime' = ?";
+    public void delete(ProgramSlot valueObject) throws SQLException {
+        String sql = "DELETE FROM `program-slot` WHERE `id` = ? ;";
         PreparedStatement stmt = null;
         openConnection();
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setDate(1,valueObject.getDateOfProgram());
-            stmt.setTime(2, valueObject.getStartTime());
+            stmt.setInt(1, valueObject.getId());
             int rowcount = stmt.executeUpdate();
             System.out.println("" + rowcount);
         } finally {
@@ -172,6 +199,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
             while (result.next()) {
                 ProgramSlot temp = new ProgramSlot();
+                temp.setId(result.getInt("id"));
                 temp.setDateOfProgram(result.getDate("dateOfProgram"));
                 temp.setDuration(result.getTime("duration"));
                 temp.setStartTime(result.getTime("startTime"));
@@ -220,4 +248,5 @@ public class ScheduleDAOImpl implements ScheduleDAO {
             e.printStackTrace();
         }
     }
+
 }

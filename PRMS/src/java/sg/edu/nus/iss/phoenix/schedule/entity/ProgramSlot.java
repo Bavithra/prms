@@ -6,15 +6,15 @@
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Time;
+import java.util.Date;
 
 /**
  *
  * @author linby
  */
 public class ProgramSlot implements Cloneable, Serializable {
-
+    private int id;//auto increase
     private String programName; //programName
     private Time duration;
     private Date dateOfProgram;
@@ -22,6 +22,14 @@ public class ProgramSlot implements Cloneable, Serializable {
     private String producer;
     private String presenter;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public Time getDuration() {
         return duration;
     }
