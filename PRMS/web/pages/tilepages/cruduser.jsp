@@ -42,8 +42,8 @@
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.cruduser.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
-                        <c:url var="delurl" scope="page" value="/nocturne/deleterp">
-                            <c:param name="name" value="${crudrp.name}"/>
+                        <c:url var="delurl" scope="page" value="/nocturne/deleteUser">
+                            <c:param name="id" value="${cruduser.id}"/>
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.cruduser.delete"/></a>
                     </td>

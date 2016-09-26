@@ -14,28 +14,48 @@ import sg.edu.nus.iss.phoenix.user.service.UserService;
  * @author Samrat
  */
 public class UserDelegate {
-    
-    /***************************************************/
-    // Instance Variables
-    /***************************************************/
-    private UserService service;
-    
-    /***************************************************/
+
+    /**
+     * ************************************************
+     */
     // Constructors
-    /***************************************************/
+    /**
+     * ************************************************
+     */
     public UserDelegate() {
-        service = new UserService();
     }
-    
-    /***************************************************/
+
+    /**
+     * ************************************************
+     */
     // Public Methods
-    /***************************************************/
-    
+    /**
+     * ************************************************
+     */
     /**
      * Method to get all the users present in the database.
+     *
      * @return List containing users present in database.
      */
     public List<User> reviewSelectUser() {
+        UserService service = new UserService();
         return service.reviewSelectUser();
+    }
+
+    public void processCreate(User user) {
+        UserService service = new UserService();
+        service.processCreate(user);
+
+    }
+
+    public void processModify(User user) {
+        UserService service = new UserService();
+        service.processModify(user);
+
+    }
+
+    public void processDelete(String id) {
+        UserService service = new UserService();
+        service.processDelete(id);
     }
 }
