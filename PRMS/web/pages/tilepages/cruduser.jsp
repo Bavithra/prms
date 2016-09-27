@@ -33,12 +33,13 @@
                         <c:set var="allRoles" value="${roleStatus.first ? '' : allRoles}${roleStatus.first? '' : ','} ${role.role}" />
                     </c:forEach>
                     <td class="nowrap">${allRoles}</td>
-                    <c:set var="allRoles" value=""></c:set>
-                    <td class="nowrap">
-                        <c:url var="updurl" scope="page" value="/nocturne/addeditrp">
-                            <c:param name="name" value="${crudrp.name}"/>
-                            <c:param name="description" value="${crudrp.description}"/>
-                            <c:param name="typicalDuration" value="${crudrp.typicalDuration}"/>
+                    
+                        <td class="nowrap">
+                        <c:url var="updurl" scope="page" value="/nocturne/addEditUser">
+                            <c:param name="id" value="${cruduser.id}"/>
+                            <c:param name="password" value="${cruduser.password}"/>
+                            <c:param name="name" value="${cruduser.name}"/>
+                            <c:param name="roles" value="${allRoles}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.cruduser.edit"/></a>
@@ -48,6 +49,7 @@
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.cruduser.delete"/></a>
                     </td>
+                    <c:set var="allRoles" value=""></c:set>
                 </tr>
             </c:forEach>
         </table>
