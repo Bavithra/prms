@@ -11,10 +11,11 @@
     </head>
     <body>
         <h1><fmt:message key="label.cruduser"/></h1>
-        <c:url var="url" scope="page" value="/nocturne/addeditrp">
+        <c:url var="url" scope="page" value="/nocturne/addEditUser">
+            <c:param name="id" value=""/>
+            <c:param name="password" value=""/>
             <c:param name="name" value=""/>
-            <c:param name="description" value=""/>
-            <c:param name="duration" value=""/>
+            <c:param name="roles" value=""/>
             <c:param name="insert" value="true"/>
         </c:url>
         <a href="${url}"><fmt:message key="label.cruduser.add"/></a>
