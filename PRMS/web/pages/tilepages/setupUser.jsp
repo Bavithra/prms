@@ -13,7 +13,7 @@
         <title><fmt:message key="title.setupUser" /></title>
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/nocturne/enterrp" method=post>
+        <form action="${pageContext.request.contextPath}/nocturne/enterUser" method=post>
             <center>
                 <table cellpadding=4 cellspacing=2 border=0>
                     <tr>

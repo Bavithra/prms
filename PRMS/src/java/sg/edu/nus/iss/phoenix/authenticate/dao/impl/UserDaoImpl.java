@@ -123,7 +123,16 @@ public class UserDaoImpl implements UserDao {
 			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getPassword());
 			stmt.setString(3, valueObject.getName());
-			stmt.setString(4, valueObject.getRoles().get(0).getRole());
+                        
+                        String roles = "";
+                        for(Role role: valueObject.getRoles()) {
+                            if(roles.equals("")) {
+                                roles += role.getRole();
+                            }else {
+                                roles = roles + "," + role.getRole();
+                            }
+                        }
+                        stmt.setString(4, roles);
 
 			int rowcount = databaseUpdate(stmt);
 			if (rowcount != 1) {
