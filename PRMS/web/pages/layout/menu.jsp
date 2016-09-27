@@ -42,6 +42,15 @@
                 </td>
             </tr>
         </c:if>
+        <c:if test="${sessionScope.user.roles[0].role=='manager'}">
+            <tr>
+		<td>
+				<a href="<c:url value="/nocturne/manageschedule"/>"> <fmt:message
+						key="caption.menu.manageschedule" />
+				</a>
+			</td>
+            </tr>
+        </c:if>
     </c:forEach>
     <tr>
         <td><a href="<c:url value="/nocturne/logout"/>"> <fmt:message
