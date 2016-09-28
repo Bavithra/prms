@@ -39,7 +39,10 @@ public class YearDAOImpl implements YearDAO {
                 throw new SQLException("PrimaryKey Error when updating DB!");
             }
 
-        } finally {
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Exception while adding a new schedule - Year");
+        }finally {
             if (stmt != null) {
                 stmt.close();
             }

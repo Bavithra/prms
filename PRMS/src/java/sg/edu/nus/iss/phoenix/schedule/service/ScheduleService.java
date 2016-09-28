@@ -5,7 +5,10 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.service;
 
+import com.sun.javafx.animation.TickCalculation;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
@@ -41,7 +44,11 @@ public class ScheduleService {
 
     public void processCreateProgramSlot(ProgramSlot valueObject) {
         try {
-            scheduleDAO.create(valueObject);
+            // First check for overlap
+            if(!checkProgramSlotOverlaps(valueObject)) {
+                // If there is no overlap, then proceed to create the program slot.
+                scheduleDAO.create(valueObject);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,5 +70,40 @@ public class ScheduleService {
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Method to check if the program slot passed overlaps with another program slot.     
+     * @param programSlot The program slot that needs to be checked.
+     * @return True if there is an overlap, else false.
+     */
+    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws NullPointerException {
+        if(programSlot != null) {
+            // Get all the existing program slots & run the loop
+            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
+            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
+                
+                Date existingStartDate = existingProgramSlot.getDateOfProgram();
+                existingStartDate.setTime(existingProgramSlot.getStartTime().getTime());
+                
+                Date existingEndDate = existingProgramSlot.getDateOfProgram();
+                existingEndDate.setTime(existingProgramSlot.getStartTime().getTime() + existingProgramSlot.getDuration().getTime());
+                
+                // The current program slot
+                Date currentStartDate = programSlot.getDateOfProgram();
+                currentStartDate.setTime(programSlot.getStartTime().getTime());
+                
+                Date currentEndDate = programSlot.getDateOfProgram();
+                currentEndDate.setTime(programSlot.getStartTime().getTime() + programSlot.getDuration().getTime());
+                
+                if((existingStartDate.before(currentEndDate)) && 
+                        (existingEndDate.after(currentEndDate))) {
+                    return true;
+                }
+            }
+            // Return the value accordingly
+            return false;
+        }
+        throw new NullPointerException();
     }
 }

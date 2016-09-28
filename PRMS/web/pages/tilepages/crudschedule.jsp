@@ -20,10 +20,10 @@
         <c:url var="url" scope="page" value="/nocturne/addeditschedule">
             <c:param name="insert" value="true"/>
         </c:url>
-        <a href="${url}"><fmt:message key="label.crudschedule.add"/></a>
+        <a href="${url}" style="float: left"><fmt:message key="label.crudschedule.add"/></a>
         <c:url var="openyearurl" scope="page" value="/nocturne/manageyear">
         </c:url>
-        <a href="${openyearurl}"><fmt:message key="label.crudschedule.manageyear"/></a>
+        <a href="${openyearurl}" style="float: right"><fmt:message key="label.crudschedule.manageyear"/></a>
         <br/><br/>
         <table class="borderAll">
             <tr>
@@ -33,7 +33,7 @@
                 <th><fmt:message key="label.crudschedule.name"/></th>
                 <th><fmt:message key="label.crudschedule.presenter"/></th>
                 <th><fmt:message key="label.crudschedule.producer"/></th>
-                <th><fmt:message key="label.crudschedule.edit"/> <fmt:message key="label.crudrp.delete"/></th>
+                <th><fmt:message key="label.crudschedule.edit"/> <fmt:message key="label.crudschedule.delete"/></th>
             </tr>
             <c:forEach var="crudschedule" items="${schedulelist}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">

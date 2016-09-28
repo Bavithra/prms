@@ -12,6 +12,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.Year;
@@ -28,7 +29,10 @@ public class EnterYearCmd implements Perform{
         ScheduleDelegate del = new ScheduleDelegate();
         Year year = new Year();
         year.setYear(Integer.valueOf(req.getParameter("year")));
-        year.setAssignedBy("pointyhead");//FIXME hardcoding need to fix latter
+        User user = (User) req.getSession().getAttribute("user");
+        if(user != null) {
+            year.setAssignedBy(user.getName());
+        }
         del.processCreateYear(year);
         //show cryear screen and retrieve data
         ReviewSelectScheduleDelegate rsdel = new ReviewSelectScheduleDelegate();
