@@ -31,7 +31,7 @@ public class EnterYearCmd implements Perform{
         year.setYear(Integer.valueOf(req.getParameter("year")));
         User user = (User) req.getSession().getAttribute("user");
         if(user != null) {
-            year.setAssignedBy(user.getName());
+            year.setAssignedBy(user.getId());
         }
         del.processCreateYear(year);
         //show cryear screen and retrieve data

@@ -6,6 +6,7 @@ import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.radioprogram.dao.ProgramDAO;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.service.ScheduleService;
 
 public class ProgramService {
 	DAOFactoryImpl factory;
@@ -93,10 +94,13 @@ public class ProgramService {
 	}
 
 	public void processDelete(String name) {
-
             try {
+                ScheduleService scheduleService = new ScheduleService();
+                scheduleService.deleteUpcomingProgramSlotsForRadioProgram(name);
+                
                 RadioProgram rp = new RadioProgram(name);
                 rpdao.delete(rp);
+                // Also update the schedules accordingly.
             } catch (NotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

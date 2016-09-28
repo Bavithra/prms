@@ -45,10 +45,10 @@ public class ScheduleService {
     public void processCreateProgramSlot(ProgramSlot valueObject) {
         try {
             // First check for overlap
-            if(!checkProgramSlotOverlaps(valueObject)) {
+            //if(!checkProgramSlotOverlaps(valueObject)) {
                 // If there is no overlap, then proceed to create the program slot.
                 scheduleDAO.create(valueObject);
-            }
+            //}
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,6 +67,24 @@ public class ScheduleService {
     public void processDeleteProgramSlot(ProgramSlot valueObject) {
         try {
             scheduleDAO.delete(valueObject);
+        } catch (SQLException ex) {
+            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Method to delete the upcoming schedules attached to a radio program.
+     * Only the upcoming schedules are deleted, & not the past ones.
+     * @param name The name of the radio program for which the schedules need to be deleted.
+     */
+    public void deleteUpcomingProgramSlotsForRadioProgram(String name) {
+        try {
+            for(ProgramSlot programSlot : scheduleDAO.loadAll()) {
+                if(programSlot.getProgramName().equals(name)) {
+                    // Here we have to add the check if it is already past today's date.
+                    scheduleDAO.delete(programSlot);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
