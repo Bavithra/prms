@@ -19,8 +19,7 @@ public interface SMRTScheduleDAO {
     //TODO - Documentation
     public abstract void create(SMRTRadioProgramSlot valueObject) throws SQLException;
     
-    public abstract List<ProgramSlot> load(SMRTRadioProgramSlot valueObject)
-            throws NotFoundException, SQLException;
+    public abstract SMRTRadioProgramSlot load(int id) throws NotFoundException, SQLException;
     
     public abstract List<SMRTRadioProgramSlot> loadAll() throws SQLException;
     

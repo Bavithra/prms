@@ -71,9 +71,47 @@ public class SMRTScheduleDAOImpl implements SMRTScheduleDAO{
         }
     }
     
-    public List<ProgramSlot> load(SMRTRadioProgramSlot valueObject)
-            throws NotFoundException, SQLException {
-        return null;
+    public SMRTRadioProgramSlot load(int id) throws NotFoundException, SQLException {
+        String sql = "SELECT * FROM `radio-program-slot` WHERE `id` = ?; ";
+        PreparedStatement stmt = null;
+        
+        UserDaoImpl userDaoImpl = new UserDaoImpl();
+        ProgramDAOImpl programDAOImpl = new ProgramDAOImpl();
+        
+        ResultSet result = null;
+        openConnection();
+        
+        stmt = connection.prepareStatement(sql);
+        //condition parameter
+        stmt.setInt(1, id);
+        
+        SMRTRadioProgramSlot radioProgramSlot = null;
+        try {
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                radioProgramSlot = new SMRTRadioProgramSlot();
+                radioProgramSlot.setId(result.getInt("id"));
+                radioProgramSlot.setStartDateTime(result.getTimestamp("startDateTime").toLocalDateTime());
+                
+                RadioProgram radioProgram = new RadioProgram(result.getString("radioProgram"));
+                programDAOImpl.load(radioProgram);
+                radioProgramSlot.setRadioProgram(radioProgram);
+                
+                radioProgramSlot.setPresenter(userDaoImpl.getObject(result.getString("presenter")));
+                radioProgramSlot.setProducer(userDaoImpl.getObject(result.getString("producer")));
+            }
+
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return radioProgramSlot;
     }
     
     public List<SMRTRadioProgramSlot> loadAll() throws SQLException {
