@@ -96,6 +96,36 @@ public class SMRTScheduleDAOImpl implements SMRTScheduleDAO{
     
     public void save(SMRTRadioProgramSlot valueObject) throws NotFoundException,SQLException {
         
+        String sql = "UPDATE `radio-program-slot` SET `startDateTime` = ?, `radioProgram` = ?, `presenter`=?, `producer`=? WHERE `id` = ? ; ";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setTimestamp(1, Timestamp.valueOf(valueObject.getStartDate()));
+            stmt.setString(2, valueObject.getRadioProgram().getName());
+            stmt.setString(3, valueObject.getPresenter().getId());
+            stmt.setString(4, valueObject.getProducer().getId());
+            
+            //condition parameter
+            stmt.setInt(5, valueObject.getId());
+            
+            int rowcount = stmt.executeUpdate();
+            if (rowcount == 0) {
+                // System.out.println("Object could not be saved! (PrimaryKey not found)");
+                throw new NotFoundException(
+                        "Object could not be saved! (PrimaryKey not found)");
+            }
+            if (rowcount > 1) {
+                // System.out.println("PrimaryKey Error when updating DB! (Many objects were affected!)");
+                throw new SQLException(
+                        "PrimaryKey Error when updating DB! (Many objects were affected!)");
+            }
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
     
     public void delete(int id)
