@@ -8,11 +8,16 @@ package sg.edu.nus.iss.phoenix.schedule.dao.impl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.util.List;
+import sg.edu.nus.iss.phoenix.authenticate.dao.impl.UserDaoImpl;
 import sg.edu.nus.iss.phoenix.core.dao.DBConstants;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
+import sg.edu.nus.iss.phoenix.radioprogram.dao.impl.ProgramDAOImpl;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.dao.SMRTScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.SMRTRadioProgramSlot;
@@ -72,7 +77,21 @@ public class SMRTScheduleDAOImpl implements SMRTScheduleDAO{
     }
     
     public List<SMRTRadioProgramSlot> loadAll() throws SQLException {
-        return null;
+        String sql = "SELECT * FROM `radio-program-slot`; ";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            return listQuery(stmt);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Something went wrong while retrieving Program Slots.");
+        }finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
     
     public void save(SMRTRadioProgramSlot valueObject) throws NotFoundException,SQLException {
@@ -116,5 +135,46 @@ public class SMRTScheduleDAOImpl implements SMRTScheduleDAO{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    
+    protected List<SMRTRadioProgramSlot> listQuery(PreparedStatement stmt) throws SQLException, NotFoundException {
+
+        ArrayList<SMRTRadioProgramSlot> searchResults = new ArrayList<SMRTRadioProgramSlot>();
+        
+        UserDaoImpl userDaoImpl = new UserDaoImpl();
+        ProgramDAOImpl programDAOImpl = new ProgramDAOImpl();
+        
+        ResultSet result = null;
+        openConnection();
+        try {
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                SMRTRadioProgramSlot temp = new SMRTRadioProgramSlot();
+                temp.setId(result.getInt("id"));
+                temp.setStartDateTime(result.getTimestamp("startDateTime").toLocalDateTime());
+                
+                RadioProgram radioProgram = new RadioProgram(result.getString("radioProgram"));
+                programDAOImpl.load(radioProgram);
+                temp.setRadioProgram(radioProgram);
+                
+                temp.setPresenter(userDaoImpl.getObject(result.getString("presenter")));
+                temp.setProducer(userDaoImpl.getObject(result.getString("producer")));
+
+                searchResults.add(temp);
+            }
+
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+
+        return searchResults;
     }
 }
