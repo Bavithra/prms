@@ -98,9 +98,25 @@ public class SMRTScheduleDAOImpl implements SMRTScheduleDAO{
         
     }
     
-    public void delete(SMRTRadioProgramSlot valueObject)
+    public void delete(int id)
             throws SQLException {
-        
+        String sql = "DELETE FROM `radio-program-slot` WHERE `id` = ? ;";
+        PreparedStatement stmt = null;
+        openConnection();
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
+            int rowcount = stmt.executeUpdate();
+            System.out.println("" + rowcount);
+        } catch(Exception e) { 
+            e.printStackTrace();
+            throw new SQLException("Something went wrong while deleting program slot.");
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
     }
 
     public void deleteAll() throws SQLException {

@@ -26,8 +26,7 @@ public interface SMRTScheduleDAO {
     
     public abstract void save(SMRTRadioProgramSlot valueObject) throws NotFoundException,SQLException;
     
-    public abstract void delete(SMRTRadioProgramSlot valueObject)
-            throws SQLException;
+    public void delete(int id) throws SQLException;
 
     public abstract void deleteAll() throws SQLException;
 }
