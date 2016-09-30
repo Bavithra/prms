@@ -28,18 +28,23 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
 public class AddEditScheduleCmd implements Perform{
    @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ReviewSelectProgramDelegate rspdel = new ReviewSelectProgramDelegate();
-        ReviewSelectScheduleDelegate rssdel= new ReviewSelectScheduleDelegate();
-        ReviewSelectProducerDelegate rsprodel = new ReviewSelectProducerDelegate();
-        ReviewSelectPresenterDelegate rspredel = new ReviewSelectPresenterDelegate();
-        List<RadioProgram> rplist=rspdel.reviewSelectRadioProgram();
-        List<Year> yearList=rssdel.reviewExistingYear();
-        List<User> presenterList = rspredel.reviewSelectPresenter();
-        List<User> producerList = rsprodel.reviewProducer();
-        req.setAttribute("years", yearList);
-        req.setAttribute("programlist",rplist);
-        req.setAttribute("presenters",presenterList);
-        req.setAttribute("producers",producerList);
+        
+        ReviewSelectProgramDelegate reviewSelectProgramDelegate = new ReviewSelectProgramDelegate();
+        List<RadioProgram> radioProgramList = reviewSelectProgramDelegate.reviewSelectRadioProgram();
+        req.setAttribute("programlist",radioProgramList);
+        
+        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate= new ReviewSelectScheduleDelegate();
+        List<Year> yearList = reviewSelectScheduleDelegate.reviewExistingYear();
+        req.setAttribute("yearList", yearList);
+        
+        ReviewSelectProducerDelegate reviewSelectProducerDelegate = new ReviewSelectProducerDelegate();
+        List<User> producerList = reviewSelectProducerDelegate.reviewProducer();
+        req.setAttribute("producerList",producerList);
+        
+        ReviewSelectPresenterDelegate reviewSelectPresenterDelegate = new ReviewSelectPresenterDelegate();
+        List<User> presenterList = reviewSelectPresenterDelegate.reviewSelectPresenter();        
+        req.setAttribute("presenterList",presenterList);
+        
         return "/pages/createprogramslot.jsp";
     }
 }

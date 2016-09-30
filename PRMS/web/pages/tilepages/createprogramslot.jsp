@@ -18,14 +18,11 @@
         <script src="//senthilraj.github.io/TimePicki/js/timepicki.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="//senthilraj.github.io/TimePicki/css/timepicki.css">
-
         <fmt:setBundle basename="ApplicationResources" />
-
         <title><fmt:message key="title.createprogramslot" /></title>
         <script>
             $(function () {
                 dateLimit();
-//              $('#timepicker').timepicki({show_meridian:false});
             });
             function dateLimit() {
                 //refresh the datepicker
@@ -38,22 +35,20 @@
                     minDate: new Date(year, 0, 1),
                     maxDate: new Date(year, 11, 31)
                 });
-                
             }
         </script>
     </head>
     <body>
-
         <form action="${pageContext.request.contextPath}/nocturne/enterprogramslot" method=post>
             <center>
-                 <input type="hidden" name="id" value="${param['id']}" />
+                <input type="hidden" name="id" value="${param['id']}" />
                 <table cellpadding=4 cellspacing=2 border=0>
                     <tr>
                         <td><fmt:message key="label.createprogramslot.year" /></td>
                         <td>
                             <select name="year" onchange="dateLimit()" id="yearpicker">
-                                <c:forEach items="${years}" var="years">
-                                    <option value="${years.year}">${years.year}</option>
+                                <c:forEach var="year" items="${yearList}">
+                                    <option value="${year.getYear()}">${year.getYear()}</option>
                                 </c:forEach>
                             </select>
                         </td>
@@ -91,8 +86,8 @@
                         <td><fmt:message key="label.createprogramslot.presenter" /></td>
                         <td>
                             <select name="presenter">
-                                <c:forEach items="${presenters}" var="presenters">
-                                    <option value="${presenters.name}">${presenters.name}</option>
+                                <c:forEach var="presenter" items="${presenterList}">
+                                    <option value="${presenter.getName()}">${presenter.getName()}</option>
                                 </c:forEach>
                             </select>
                         </td>
@@ -101,8 +96,8 @@
                         <td><fmt:message key="label.createprogramslot.producer" /></td>
                         <td>
                             <select name="producer">
-                                <c:forEach items="${producers}" var="producers">
-                                    <option value="${producers.name}">${producers.name}</option>
+                                <c:forEach var="producer" items="${producerList}">
+                                    <option value="${producer.getName()}">${producer.getName()}</option>
                                 </c:forEach>
                             </select>
                         </td>
@@ -117,6 +112,5 @@
             <input type="submit" value="Submit"> <input type="reset"
                                                         value="Reset">
         </form>
-
     </body>
 </html>

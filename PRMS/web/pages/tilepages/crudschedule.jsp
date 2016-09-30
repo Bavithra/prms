@@ -18,6 +18,11 @@
     <body>
         <h1><fmt:message key="label.crudschedule"/></h1>
         <c:url var="url" scope="page" value="/nocturne/addeditschedule">
+            <c:param name="id" value=""/>
+            <c:param name="dateOfProgram" value=""/>
+            <c:param name="startTime" value=""/>
+            <c:param name="presenter" value=""/>
+            <c:param name="producer" value=""/>
             <c:param name="insert" value="true"/>
         </c:url>
         <a href="${url}" style="float: left"><fmt:message key="label.crudschedule.add"/></a>
@@ -44,9 +49,14 @@
                     <td class="nowrap">${programSlot.getFormattedEndTime()}</td>
                     <td class="nowrap">${programSlot.getRadioProgram().getName()}</td>
                     <td class="nowrap">${programSlot.getPresenter().getId()}</td>
-                    <td class="nowrap">${programSlot.producer.getId()}</td>
+                    <td class="nowrap">${programSlot.getProducer().getId()}</td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditschedule">
+                            <c:param name="id" value="${programSlot.getId()}"/>
+                            <c:param name="dateOfProgram" value="${programSlot.getId()}"/>
+                            <c:param name="startTime" value="${programSlot.getId()}"/>
+                            <c:param name="presenter" value="${programSlot.getPresenter().getId()}"/>
+                            <c:param name="producer" value="${programSlot.getProducer().getId()}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudschedule.edit"/></a>
