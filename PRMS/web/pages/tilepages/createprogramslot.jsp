@@ -77,12 +77,7 @@
                     </tr>
                     <tr>
                         <td><fmt:message key="label.createprogramslot.dateofprogram" /></td>
-                        <td><input id="flatpickr" class="flatpickr flatpickr-input active" name="dateOfProgram" value="${param['dateOfProgram']}" data-enable-time="true" placeholder="Pick date and time" readonly="readonly">
-                    </tr>
-                    <tr>
-                        <td><fmt:message key="label.createprogramslot.startTime" /></td>
-                        <td><input type="text" name="startTime" id="timepicker" 
-                                   value="${param['startTime']}" size=40 maxlength=20></td>
+                        <td><input id="flatpickr" class="flatpickr flatpickr-input active" name="dateOfProgram" value="${param['dateOfProgram']}" data-enable-time="true"    readonly="readonly">
                     </tr>
                     <tr>
                         <td><fmt:message key="label.createprogramslot.presenter" /></td>
@@ -113,11 +108,11 @@
         <script>
             $(function () {
                 initCustomDatePicker();
-                updateDateLimit();
                 customDatePickerEventHandler();
             });
             function initCustomDatePicker() {
                 document.getElementById("flatpickr").flatpickr();
+                updateDateLimit();
             }
             function updateDateLimit() {
                 //set the datevalue and constraints
@@ -135,7 +130,6 @@
                 document.getElementById("flatpickr").flatpickr({
                     enableTime: true,
                     onChange: function (dateObj, dateStr, instance) {
-                        alert(dateStr);
                     }
                 });
             }

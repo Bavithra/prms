@@ -54,10 +54,8 @@ public class EnterScheduleCmd implements Perform{
             
         }
         
-
         String ins = (String) req.getParameter("ins");
-        
-         if (ins.equalsIgnoreCase("true")) {
+        if (ins.equalsIgnoreCase("true")) {
              //insert
              scheduleDelegate.processCreateProgramSlot(programSlot);
         } else {

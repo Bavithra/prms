@@ -125,7 +125,7 @@ public class ProgramSlot {
     public String getFormattedEndTime() {
         // Add the duration of Radio Program to the `startDateTime`
         LocalDateTime endDateTime = startDateTime.plusHours(radioProgram.getTypicalDuration().getHours());
-        endDateTime = startDateTime.plusMinutes(radioProgram.getTypicalDuration().getMinutes());
+        endDateTime = endDateTime.plusMinutes(radioProgram.getTypicalDuration().getMinutes());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return endDateTime.format(formatter);
     }
