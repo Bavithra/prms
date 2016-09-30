@@ -62,7 +62,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         try {
             sql = "INSERT INTO `radio-program-slot` (`startDateTime`, `radioProgram`, `presenter`,`producer`) VALUES (?,?,?,?); ";
             stmt = connection.prepareStatement(sql);
-            stmt.setTimestamp(1, Timestamp.valueOf(valueObject.getStartDate()));
+            stmt.setTimestamp(1, Timestamp.valueOf(valueObject.getStartDateTime()));
             stmt.setString(2, valueObject.getRadioProgram().getName());
             stmt.setString(3, valueObject.getPresenter().getId());
             stmt.setString(4, valueObject.getProducer().getId());
@@ -135,7 +135,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         openConnection();
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setTimestamp(1, Timestamp.valueOf(valueObject.getStartDate()));
+            stmt.setTimestamp(1, Timestamp.valueOf(valueObject.getStartDateTime()));
             stmt.setString(2, valueObject.getRadioProgram().getName());
             stmt.setString(3, valueObject.getPresenter().getId());
             stmt.setString(4, valueObject.getProducer().getId());

@@ -6,6 +6,7 @@
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 
@@ -31,7 +32,7 @@ public class ProgramSlot {
     }
 
     /*****************************/
-    // Public Methods
+    // Getters & Setters
     /*****************************/
     public int getId() {
         return id;
@@ -49,7 +50,7 @@ public class ProgramSlot {
         this.radioProgram = radioProgram;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
@@ -73,6 +74,39 @@ public class ProgramSlot {
         this.producer = producer;
     }
     
+    /*****************************/
+    // Public Methods
+    /*****************************/
+    
+    /**
+     * Method to get the formatted start date from the startDateTime that is set.
+     * @return Formatted start date in "dd-MM-yyyy" format.
+     */
+    public String getFormattedStartDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return startDateTime.format(formatter);
+    }
+    
+    /**
+     * Method to get formatted start time from the startDateTime that is set.
+     * @return Formatted start time in "HH:mm" format.
+     */
+    public String getFormattedStartTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return startDateTime.format(formatter);
+    }
+    
+    /**
+     * Method to get the formatted end time from the startDateTime & duration of the program.
+     * @return Formatted end time in "HH:mm" format.
+     */
+    public String getFormattedEndTime() {
+        // Add the duration of Radio Program to the `startDateTime`
+        LocalDateTime endDateTime = startDateTime.plusHours(radioProgram.getTypicalDuration().getHours());
+        endDateTime = startDateTime.plusMinutes(radioProgram.getTypicalDuration().getMinutes());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return endDateTime.format(formatter);
+    }
     /*****************************/
     // Private Methods
     /*****************************/

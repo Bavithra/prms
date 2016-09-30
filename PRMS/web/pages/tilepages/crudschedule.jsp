@@ -30,19 +30,21 @@
                 <th><fmt:message key="label.crudschedule.dateofprogram"/></th>
                 <th><fmt:message key="label.crudschedule.startTime"/></th>
                 <th><fmt:message key="label.crudschedule.duration"/></th>
+                <th><fmt:message key="label.crudschedule.endTime"/></th>
                 <th><fmt:message key="label.crudschedule.name"/></th>
                 <th><fmt:message key="label.crudschedule.presenter"/></th>
                 <th><fmt:message key="label.crudschedule.producer"/></th>
                 <th><fmt:message key="label.crudschedule.edit"/> <fmt:message key="label.crudschedule.delete"/></th>
             </tr>
-            <c:forEach var="crudschedule" items="${scheduleList}" varStatus="status">
+            <c:forEach var="crudSchedule" items="${scheduleList}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
-                    <td class="nowrap">"Program Date"</td>
-                    <td class="nowrap">"Time"</td>
-                    <td class="nowrap">"Duration"</td>
-                    <td class="nowrap">"Program Name"</td>
-                    <td class="nowrap">${crudschedule.presenter.getName()}</td>
-                    <td class="nowrap">${crudschedule.producer.getName()}</td>
+                    <td class="nowrap">${crudSchedule.getFormattedStartDate()}</td>
+                    <td class="nowrap">${crudSchedule.getFormattedStartTime()}</td>
+                    <td class="nowrap">${crudSchedule.getRadioProgram().getTypicalDuration()}</td>
+                    <td class="nowrap">${crudSchedule.getFormattedEndTime()}</td>
+                    <td class="nowrap">${crudSchedule.getRadioProgram().getName()}</td>
+                    <td class="nowrap">${crudSchedule.presenter.getId()}</td>
+                    <td class="nowrap">${crudSchedule.producer.getId()}</td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditschedule">
                             <c:param name="insert" value="false"/>
