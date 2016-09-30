@@ -11,15 +11,19 @@ import java.io.IOException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sg.edu.nus.iss.phoenix.radioprogram.delegate.ProgramDelegate;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ScheduleDelegate;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 
 /**
  *
@@ -30,37 +34,43 @@ public class EnterScheduleCmd implements Perform{
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ScheduleDelegate del = new ScheduleDelegate();
-        ProgramSlot programslot = new ProgramSlot();
-        String date = req.getParameter("dateOfProgram");
-        SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
-        Time duration = Time.valueOf(req.getParameter("duration"));
-        Time startTime= Time.valueOf(req.getParameter("startTime"));
-//        try {
-////            programslot.setDateOfProgram(sdf.parse(date));
-////            programslot.setDuration(duration);
-////            programslot.setPresenter(req.getParameter("presenter"));
-////            programslot.setProducer(req.getParameter("producer"));
-////            programslot.setProgramName(req.getParameter("program"));
-////            programslot.setStartTime(startTime);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(EnterScheduleCmd.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        ScheduleDelegate scheduleDelegate = new ScheduleDelegate();
+        UserDelegate userDelegate = new UserDelegate();
+        ProgramDelegate programDelegate = new ProgramDelegate();
+        
+        ProgramSlot programSlot = new ProgramSlot();
+        
+        String dateString = req.getParameter("dateOfProgram");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        programSlot.setStartDateTime(LocalDateTime.parse(dateString, formatter));
+        try {
+           programSlot.setPresenter(userDelegate.loadUser(req.getParameter("presenter")));
+           programSlot.setProducer(userDelegate.loadUser(req.getParameter("producer")));
+           programSlot.setRadioProgram(programDelegate.loadRadioProgram(req.getParameter("program")));
+        } catch(Exception e) {
+            
+        } finally {
+            
+        }
+        
+
         String ins = (String) req.getParameter("ins");
-        Logger.getLogger(getClass().getName()).log(Level.INFO,
-                        "presenter: " + req.getParameter("presenter"));
+        
          if (ins.equalsIgnoreCase("true")) {
              //insert
-             del.processCreateProgramSlot(programslot);
+             scheduleDelegate.processCreateProgramSlot(programSlot);
         } else {
              //update
              String id =  req.getParameter("id");
-             programslot.setId(Integer.valueOf(id));
-             del.processUpdateProgramSlot(programslot);
+             programSlot.setId(Integer.valueOf(id));
+             scheduleDelegate.processUpdateProgramSlot(programSlot);
         }
-        ReviewSelectScheduleDelegate rsdel = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> data = rsdel.reviewSelectProgramSlot();
-        req.setAttribute("schedulelist", data);
+         
+        // Navigation
+        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
+        List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
+        req.setAttribute("scheduleList", data);
         return "/pages/crudschedule.jsp";
     }
     

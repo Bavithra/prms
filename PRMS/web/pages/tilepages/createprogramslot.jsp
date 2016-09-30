@@ -18,6 +18,9 @@
         <script src="//senthilraj.github.io/TimePicki/js/timepicki.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="//senthilraj.github.io/TimePicki/css/timepicki.css">
+        <link rel="stylesheet" type="text/css" href="<c:url value='/css/flatpickr.min.css'/>">
+        <script src="<c:url value='/scripts/flatpickr.min.js'/>"></script>
+
         <fmt:setBundle basename="ApplicationResources" />
         <title><fmt:message key="title.createprogramslot" /></title>
         <script>
@@ -46,7 +49,7 @@
                     <tr>
                         <td><fmt:message key="label.createprogramslot.year" /></td>
                         <td>
-                            <select name="year" onchange="dateLimit()" id="yearpicker">
+                            <select name="year" onchange="updateDateLimit()" id="yearpicker">
                                 <c:forEach var="year" items="${yearList}">
                                     <option value="${year.getYear()}">${year.getYear()}</option>
                                 </c:forEach>
@@ -74,8 +77,7 @@
                     </tr>
                     <tr>
                         <td><fmt:message key="label.createprogramslot.dateofprogram" /></td>
-                        <td><input type="text" name="dateOfProgram" id="datepicker" readonly
-                                   value="${param['dateOfProgram']}" size=30 maxlength=20></td>
+                        <td><input id="flatpickr" class="flatpickr flatpickr-input active" name="dateOfProgram" value="${param['dateOfProgram']}" data-enable-time="true" placeholder="Pick date and time" readonly="readonly">
                     </tr>
                     <tr>
                         <td><fmt:message key="label.createprogramslot.startTime" /></td>
@@ -87,7 +89,7 @@
                         <td>
                             <select name="presenter">
                                 <c:forEach var="presenter" items="${presenterList}">
-                                    <option value="${presenter.getName()}">${presenter.getName()}</option>
+                                    <option value="${presenter.getId()}">${presenter.getName()}</option>
                                 </c:forEach>
                             </select>
                         </td>
@@ -97,20 +99,47 @@
                         <td>
                             <select name="producer">
                                 <c:forEach var="producer" items="${producerList}">
-                                    <option value="${producer.getName()}">${producer.getName()}</option>
+                                    <option value="${producer.getId()}">${producer.getName()}</option>
                                 </c:forEach>
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-                        <td><fmt:message key="label.createprogramslot.duration" /></td>
-                        <td><input type="text" name="duration"
-                                   value="${param['duration']}" size=15 maxlength=20></td>
                     </tr>
                 </table>
             </center>
             <input type="submit" value="Submit"> <input type="reset"
                                                         value="Reset">
         </form>
+
+        <script>
+            $(function () {
+                initCustomDatePicker();
+                updateDateLimit();
+                customDatePickerEventHandler();
+            });
+            function initCustomDatePicker() {
+                document.getElementById("flatpickr").flatpickr();
+            }
+            function updateDateLimit() {
+                //set the datevalue and constraints
+                var year = document.getElementById("yearpicker").options[document.getElementById("yearpicker").selectedIndex].text;
+                document.getElementById("flatpickr").flatpickr({
+                    enable: [
+                        {
+                            from: new Date(year, 0, 1),
+                            to: new Date(year, 11, 31)
+                        }
+                    ]
+                });
+            }
+            function customDatePickerEventHandler() {
+                document.getElementById("flatpickr").flatpickr({
+                    enableTime: true,
+                    onChange: function (dateObj, dateStr, instance) {
+                        alert(dateStr);
+                    }
+                });
+            }
+        </script>
+
     </body>
 </html>

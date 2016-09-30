@@ -7,6 +7,7 @@ package sg.edu.nus.iss.phoenix.user.delegate;
 
 import java.util.List;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.user.service.UserService;
 
 /**
@@ -57,5 +58,10 @@ public class UserDelegate {
     public void processDelete(String id) {
         UserService service = new UserService();
         service.processDelete(id);
+    }
+    
+    public User loadUser(String id) throws NotFoundException {
+        UserService service = new UserService();
+        return service.loadUser(id);
     }
 }

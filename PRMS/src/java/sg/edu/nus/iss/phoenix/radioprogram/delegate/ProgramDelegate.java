@@ -46,4 +46,9 @@ public class ProgramDelegate {
 		ProgramService service = new ProgramService();
 		service.processDelete(name);
 	}
+        
+        public RadioProgram loadRadioProgram(String name) {
+            ProgramService service = new ProgramService();
+            return service.findRP(name);
+        }
 }

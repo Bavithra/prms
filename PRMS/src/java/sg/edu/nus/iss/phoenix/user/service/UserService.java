@@ -102,4 +102,14 @@ public class UserService {
             e.printStackTrace();
         }
     }
+    
+    public User loadUser(String id) throws NotFoundException {
+        try {
+            return userDao.getObject(id);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
