@@ -25,7 +25,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
  *
  * @author linby
  */
-@Action("deleteschedule")
+@Action("deleteSchedule")
 public class DeleteScheduleCmd implements Perform {
 
     @Override
@@ -34,9 +34,9 @@ public class DeleteScheduleCmd implements Perform {
         String id = req.getParameter("id");
         scheduleDelegate.processDeleteProgramSlot(Integer.valueOf(id));
         
-        ReviewSelectScheduleDelegate rssdel = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> list = rssdel.reviewSelectProgramSlot();
-        req.setAttribute("schedulelist", list);
+        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
+        List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
+        req.setAttribute("scheduleList", data);
         return "/pages/crudschedule.jsp";
     }
 

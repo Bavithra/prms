@@ -36,22 +36,23 @@
                 <th><fmt:message key="label.crudschedule.producer"/></th>
                 <th><fmt:message key="label.crudschedule.edit"/> <fmt:message key="label.crudschedule.delete"/></th>
             </tr>
-            <c:forEach var="crudSchedule" items="${scheduleList}" varStatus="status">
+            <c:forEach var="programSlot" items="${scheduleList}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
-                    <td class="nowrap">${crudSchedule.getFormattedStartDate()}</td>
-                    <td class="nowrap">${crudSchedule.getFormattedStartTime()}</td>
-                    <td class="nowrap">${crudSchedule.getRadioProgram().getTypicalDuration()}</td>
-                    <td class="nowrap">${crudSchedule.getFormattedEndTime()}</td>
-                    <td class="nowrap">${crudSchedule.getRadioProgram().getName()}</td>
-                    <td class="nowrap">${crudSchedule.presenter.getId()}</td>
-                    <td class="nowrap">${crudSchedule.producer.getId()}</td>
+                    <td class="nowrap">${programSlot.getFormattedStartDate()}</td>
+                    <td class="nowrap">${programSlot.getFormattedStartTime()}</td>
+                    <td class="nowrap">${programSlot.getRadioProgram().getTypicalDuration()}</td>
+                    <td class="nowrap">${programSlot.getFormattedEndTime()}</td>
+                    <td class="nowrap">${programSlot.getRadioProgram().getName()}</td>
+                    <td class="nowrap">${programSlot.getPresenter().getId()}</td>
+                    <td class="nowrap">${programSlot.producer.getId()}</td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditschedule">
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudschedule.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
-                        <c:url var="delurl" scope="page" value="/nocturne/deleteschedule">
+                        <c:url var="delurl" scope="page" value="/nocturne/deleteSchedule">
+                            <c:param name="id" value="${programSlot.getId()}"/>
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.crudschedule.delete"/></a>
                     </td>

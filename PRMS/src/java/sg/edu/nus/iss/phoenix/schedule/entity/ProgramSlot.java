@@ -15,25 +15,38 @@ import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
  * @author Samrat
  */
 public class ProgramSlot {
-    
-    /*****************************/
+
+    /**
+     * **************************
+     */
     // Instance Variables
-    /*****************************/
+    /**
+     * **************************
+     */
     private int id;
     private RadioProgram radioProgram;
     private LocalDateTime startDateTime;
     private User presenter;
     private User producer;
-    /*****************************/
+
+    /**
+     * **************************
+     */
     // Constructor
-    /*****************************/
+    /**
+     * **************************
+     */
     public ProgramSlot() {
-        
+
     }
 
-    /*****************************/
+    /**
+     * **************************
+     */
     // Getters & Setters
-    /*****************************/
+    /**
+     * **************************
+     */
     public int getId() {
         return id;
     }
@@ -73,31 +86,40 @@ public class ProgramSlot {
     public void setProducer(User producer) {
         this.producer = producer;
     }
-    
-    /*****************************/
+
+    /**
+     * **************************
+     */
     // Public Methods
-    /*****************************/
+    /**
+     * **************************
+     */
     
     /**
-     * Method to get the formatted start date from the startDateTime that is set.
+     * Method to get the formatted start date from the startDateTime that is
+     * set.
+     *
      * @return Formatted start date in "dd-MM-yyyy" format.
      */
     public String getFormattedStartDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return startDateTime.format(formatter);
     }
-    
+
     /**
      * Method to get formatted start time from the startDateTime that is set.
+     *
      * @return Formatted start time in "HH:mm" format.
      */
     public String getFormattedStartTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return startDateTime.format(formatter);
     }
-    
+
     /**
-     * Method to get the formatted end time from the startDateTime & duration of the program.
+     * Method to get the formatted end time from the startDateTime & duration of
+     * the program.
+     *
      * @return Formatted end time in "HH:mm" format.
      */
     public String getFormattedEndTime() {
@@ -107,7 +129,13 @@ public class ProgramSlot {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return endDateTime.format(formatter);
     }
-    /*****************************/
+    /**
+     * **************************
+     */
     // Private Methods
-    /*****************************/
+    /**
+     * **************************
+     */
+    
+    
 }
