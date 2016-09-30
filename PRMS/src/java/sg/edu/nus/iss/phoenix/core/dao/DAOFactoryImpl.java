@@ -42,6 +42,7 @@ public class DAOFactoryImpl implements DAOFactory {
         return sdDAO;
     }
 
+    @Override
     public YearDAO getYearDAO() {
         return yearDAO;
     }

@@ -5,10 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.service;
 
-import com.sun.javafx.animation.TickCalculation;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
@@ -46,8 +43,8 @@ public class ScheduleService {
         try {
             // First check for overlap
             //if(!checkProgramSlotOverlaps(valueObject)) {
-                // If there is no overlap, then proceed to create the program slot.
-                scheduleDAO.create(valueObject);
+            // If there is no overlap, then proceed to create the program slot.
+            scheduleDAO.create(valueObject);
             //}
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,64 +61,68 @@ public class ScheduleService {
         }
     }
 
-    public void processDeleteProgramSlot(ProgramSlot valueObject) {
+    public void processDeleteProgramSlot(int id) {
         try {
-            scheduleDAO.delete(valueObject);
-        } catch (SQLException ex) {
+            scheduleDAO.delete(id);
+        } catch (Exception ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
-     * Method to delete the upcoming schedules attached to a radio program.
-     * Only the upcoming schedules are deleted, & not the past ones.
-     * @param name The name of the radio program for which the schedules need to be deleted.
+     * Method to delete the upcoming schedules attached to a radio program. Only
+     * the upcoming schedules are deleted, & not the past ones.
+     *
+     * @param name The name of the radio program for which the schedules need to
+     * be deleted.
      */
     public void deleteUpcomingProgramSlotsForRadioProgram(String name) {
         try {
-            for(ProgramSlot programSlot : scheduleDAO.loadAll()) {
-                if(programSlot.getProgramName().equals(name)) {
+            for (ProgramSlot programSlot : scheduleDAO.loadAll()) {
+                if (programSlot.getRadioProgram().getName().equals(name)) {
                     // Here we have to add the check if it is already past today's date.
-                    scheduleDAO.delete(programSlot);
+                    scheduleDAO.delete(programSlot.getId());
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
-     * Method to check if the program slot passed overlaps with another program slot.     
+     * Method to check if the program slot passed overlaps with another program
+     * slot.
+     *
      * @param programSlot The program slot that needs to be checked.
      * @return True if there is an overlap, else false.
      */
-    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws NullPointerException {
-        if(programSlot != null) {
-            // Get all the existing program slots & run the loop
-            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
-            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
-                
-                Date existingStartDate = existingProgramSlot.getDateOfProgram();
-                existingStartDate.setTime(existingProgramSlot.getStartTime().getTime());
-                
-                Date existingEndDate = existingProgramSlot.getDateOfProgram();
-                existingEndDate.setTime(existingProgramSlot.getStartTime().getTime() + existingProgramSlot.getDuration().getTime());
-                
-                // The current program slot
-                Date currentStartDate = programSlot.getDateOfProgram();
-                currentStartDate.setTime(programSlot.getStartTime().getTime());
-                
-                Date currentEndDate = programSlot.getDateOfProgram();
-                currentEndDate.setTime(programSlot.getStartTime().getTime() + programSlot.getDuration().getTime());
-                
-                if((existingStartDate.before(currentEndDate)) && 
-                        (existingEndDate.after(currentEndDate))) {
-                    return true;
-                }
-            }
-            // Return the value accordingly
-            return false;
-        }
-        throw new NullPointerException();
-    }
+//    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws NullPointerException {
+//        if(programSlot != null) {
+//            // Get all the existing program slots & run the loop
+//            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
+//            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
+//                
+//                Date existingStartDate = existingProgramSlot.getDateOfProgram();
+//                existingStartDate.setTime(existingProgramSlot.getStartTime().getTime());
+//                
+//                Date existingEndDate = existingProgramSlot.getDateOfProgram();
+//                existingEndDate.setTime(existingProgramSlot.getStartTime().getTime() + existingProgramSlot.getDuration().getTime());
+//                
+//                // The current program slot
+//                Date currentStartDate = programSlot.getDateOfProgram();
+//                currentStartDate.setTime(programSlot.getStartTime().getTime());
+//                
+//                Date currentEndDate = programSlot.getDateOfProgram();
+//                currentEndDate.setTime(programSlot.getStartTime().getTime() + programSlot.getDuration().getTime());
+//                
+//                if((existingStartDate.before(currentEndDate)) && 
+//                        (existingEndDate.after(currentEndDate))) {
+//                    return true;
+//                }
+//            }
+//            // Return the value accordingly
+//            return false;
+//        }
+//        throw new NullPointerException();
+//    }
 }

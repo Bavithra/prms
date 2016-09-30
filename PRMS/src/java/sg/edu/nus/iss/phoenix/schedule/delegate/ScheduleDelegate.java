@@ -27,8 +27,8 @@ public class ScheduleDelegate {
         service.processCreateProgramSlot(valueObject);
     }
     
-    public void processDeleteProgramSlot(ProgramSlot valueObject){
-        service.processDeleteProgramSlot(valueObject);
+    public void processDeleteProgramSlot(int id){
+        service.processDeleteProgramSlot(id);
     }
     
     public void processUpdateProgramSlot(ProgramSlot valueObject){

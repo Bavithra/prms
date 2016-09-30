@@ -5,23 +5,34 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.entity;
 
-import java.io.Serializable;
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDateTime;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 
 /**
  *
- * @author linby
+ * @author Samrat
  */
-public class ProgramSlot implements Cloneable, Serializable {
-    private int id;//auto increase
-    private String programName; //programName
-    private Time duration;
-    private Date dateOfProgram;
-    private Time startTime;
-    private String producer;
-    private String presenter;
+public class ProgramSlot {
+    
+    /*****************************/
+    // Instance Variables
+    /*****************************/
+    private int id;
+    private RadioProgram radioProgram;
+    private LocalDateTime startDateTime;
+    private User presenter;
+    private User producer;
+    /*****************************/
+    // Constructor
+    /*****************************/
+    public ProgramSlot() {
+        
+    }
 
+    /*****************************/
+    // Public Methods
+    /*****************************/
     public int getId() {
         return id;
     }
@@ -29,54 +40,40 @@ public class ProgramSlot implements Cloneable, Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public Time getDuration() {
-        return duration;
+
+    public RadioProgram getRadioProgram() {
+        return radioProgram;
     }
 
-    public void setDuration(Time duration) {
-        this.duration = duration;
+    public void setRadioProgram(RadioProgram radioProgram) {
+        this.radioProgram = radioProgram;
     }
 
-    public Date getDateOfProgram() {
-        return dateOfProgram;
+    public LocalDateTime getStartDate() {
+        return startDateTime;
     }
 
-    public void setDateOfProgram(Date dateOfProgram) {
-        this.dateOfProgram = dateOfProgram;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public String getProgramName() {
-        return programName;
-    }
-
-    public void setProgramName(String programName) {
-        this.programName = programName;
-    }
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getProducer() {
-        return producer;
-    }
-
-    public void setProducer(String producer) {
-        this.producer = producer;
-    }
-
-    public String getPresenter() {
+    public User getPresenter() {
         return presenter;
     }
 
-    public void setPresenter(String presenter) {
+    public void setPresenter(User presenter) {
         this.presenter = presenter;
     }
 
+    public User getProducer() {
+        return producer;
+    }
+
+    public void setProducer(User producer) {
+        this.producer = producer;
+    }
     
+    /*****************************/
+    // Private Methods
+    /*****************************/
 }

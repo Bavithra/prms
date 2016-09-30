@@ -30,11 +30,10 @@ public class DeleteScheduleCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ScheduleDelegate del = new ScheduleDelegate();
-        ProgramSlot psEntity = new ProgramSlot();
+        ScheduleDelegate scheduleDelegate = new ScheduleDelegate();
         String id = req.getParameter("id");
-        psEntity.setId(Integer.valueOf(id));
-        del.processDeleteProgramSlot(psEntity);
+        scheduleDelegate.processDeleteProgramSlot(Integer.valueOf(id));
+        
         ReviewSelectScheduleDelegate rssdel = new ReviewSelectScheduleDelegate();
         List<ProgramSlot> list = rssdel.reviewSelectProgramSlot();
         req.setAttribute("schedulelist", list);

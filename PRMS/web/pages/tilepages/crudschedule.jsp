@@ -35,32 +35,21 @@
                 <th><fmt:message key="label.crudschedule.producer"/></th>
                 <th><fmt:message key="label.crudschedule.edit"/> <fmt:message key="label.crudschedule.delete"/></th>
             </tr>
-            <c:forEach var="crudschedule" items="${schedulelist}" varStatus="status">
+            <c:forEach var="crudschedule" items="${scheduleList}" varStatus="status">
                 <tr class="${status.index%2==0?'even':'odd'}">
-                    <td class="nowrap">${crudschedule.dateOfProgram}</td>
-                    <td class="nowrap">${crudschedule.startTime}</td>
-                    <td class="nowrap">${crudschedule.duration}</td>
-                    <td class="nowrap">${crudschedule.programName}</td>
-                    <td class="nowrap">${crudschedule.presenter}</td>
-                    <td class="nowrap">${crudschedule.producer}</td>
+                    <td class="nowrap">"Program Date"</td>
+                    <td class="nowrap">"Time"</td>
+                    <td class="nowrap">"Duration"</td>
+                    <td class="nowrap">"Program Name"</td>
+                    <td class="nowrap">${crudschedule.presenter.getName()}</td>
+                    <td class="nowrap">${crudschedule.producer.getName()}</td>
                     <td class="nowrap">
                         <c:url var="updurl" scope="page" value="/nocturne/addeditschedule">
-                            <c:param name="dateOfProgram" value="${crudschedule.dateOfProgram}"/>
-                            <c:param name="startTime" value="${crudschedule.startTime}"/>
-                            <c:param name="duration" value="${crudschedule.duration}"/>
-                            <c:param name="programName" value="${crudschedule.programName}"/>
-                            <c:param name="presenter" value="${crudschedule.presenter}"/>
-                            <c:param name="producer" value="${crudschedule.producer}"/>
-                            <c:param name="id" value="${crudschedule.id}"/>
                             <c:param name="insert" value="false"/>
                         </c:url>
                         <a href="${updurl}"><fmt:message key="label.crudschedule.edit"/></a>
                         &nbsp;&nbsp;&nbsp;
                         <c:url var="delurl" scope="page" value="/nocturne/deleteschedule">
-                            <c:param name="id" value="${crudschedule.id}"/>
-                            <c:param name="programname" value="${crudschedule.programName}"/>
-                            <c:param name="programdate" value="${crudschedule.dateOfProgram}"/>
-                            <c:param name="starttime" value="${crudschedule.startTime}"/>
                         </c:url>
                         <a href="${delurl}"><fmt:message key="label.crudschedule.delete"/></a>
                     </td>

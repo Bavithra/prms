@@ -36,16 +36,16 @@ public class EnterScheduleCmd implements Perform{
         SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
         Time duration = Time.valueOf(req.getParameter("duration"));
         Time startTime= Time.valueOf(req.getParameter("startTime"));
-        try {
-            programslot.setDateOfProgram(sdf.parse(date));
-            programslot.setDuration(duration);
-            programslot.setPresenter(req.getParameter("presenter"));
-            programslot.setProducer(req.getParameter("producer"));
-            programslot.setProgramName(req.getParameter("program"));
-            programslot.setStartTime(startTime);
-        } catch (ParseException ex) {
-            Logger.getLogger(EnterScheduleCmd.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+////            programslot.setDateOfProgram(sdf.parse(date));
+////            programslot.setDuration(duration);
+////            programslot.setPresenter(req.getParameter("presenter"));
+////            programslot.setProducer(req.getParameter("producer"));
+////            programslot.setProgramName(req.getParameter("program"));
+////            programslot.setStartTime(startTime);
+//        } catch (ParseException ex) {
+//            Logger.getLogger(EnterScheduleCmd.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         String ins = (String) req.getParameter("ins");
         Logger.getLogger(getClass().getName()).log(Level.INFO,
                         "presenter: " + req.getParameter("presenter"));

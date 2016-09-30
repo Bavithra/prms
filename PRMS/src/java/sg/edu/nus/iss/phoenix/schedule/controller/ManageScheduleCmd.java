@@ -24,9 +24,9 @@ public class ManageScheduleCmd implements Perform{
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        ReviewSelectScheduleDelegate del = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> data = del.reviewSelectProgramSlot();
-        req.setAttribute("schedulelist", data);
+        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
+        List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
+        req.setAttribute("scheduleList", data);
         return "/pages/crudschedule.jsp";
     }
     
