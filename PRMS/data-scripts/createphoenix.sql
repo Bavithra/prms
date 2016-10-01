@@ -148,3 +148,59 @@ ENGINE = InnoDB;
 CREATE UNIQUE INDEX `startDate_UNIQUE` ON `phoenix`.`weekly-schedule` (`startDate` ASC) ;
 
 CREATE INDEX `id_assigned_by` ON `phoenix`.`weekly-schedule` (`assignedBy` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Added implementation
+-- -----------------------------------------------------
+ALTER TABLE `phoenix`.`program-slot` 
+DROP FOREIGN KEY `name`;
+
+ALTER TABLE `phoenix`.`program-slot` 
+CHANGE COLUMN `duration` `duration` TIME NULL ,
+CHANGE COLUMN `startTime` `startTime` DATETIME NOT NULL ,
+CHANGE COLUMN `program-name` `program-name` VARCHAR(45) NOT NULL ,
+ADD COLUMN `presenter` VARCHAR(45) NOT NULL AFTER `program-name`,
+ADD COLUMN `producer` VARCHAR(45) NOT NULL AFTER `presenter`,
+ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT FIRST,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`id`),
+DROP INDEX `dateOfProgram_UNIQUE` ;
+
+ALTER TABLE `phoenix`.`program-slot` 
+ADD CONSTRAINT `name`
+  FOREIGN KEY (`program-name`)
+  REFERENCES `phoenix`.`radio-program` (`name`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `phoenix`.`program-slot` 
+CHANGE COLUMN `startTime` `startTime` TIME NOT NULL ;
+
+ALTER TABLE `annual-schedule` CHANGE `assingedBy` `assignedBy` VARCHAR(45) NOT NULL;
+
+CREATE TABLE `phoenix`.`radio-program-slot` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `startDateTime` DATETIME NOT NULL,
+  `radioProgram` VARCHAR(45) NULL,
+  `presenter` VARCHAR(45) NULL,
+  `producer` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `presenter_idx` (`presenter` ASC),
+  INDEX `producer_idx` (`producer` ASC),
+  INDEX `radioProgram_idx` (`radioProgram` ASC),
+  CONSTRAINT `presenter`
+    FOREIGN KEY (`presenter`)
+    REFERENCES `phoenix`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `producer`
+    FOREIGN KEY (`producer`)
+    REFERENCES `phoenix`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `radioProgram`
+    FOREIGN KEY (`radioProgram`)
+    REFERENCES `phoenix`.`radio-program` (`name`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
