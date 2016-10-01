@@ -25,41 +25,48 @@ import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
  * @author Suba Raj
  */
 public class UserDelegateTest {
-    
+
+    UserDelegate instance;
+    User user;
+
     public UserDelegateTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
+        instance = new UserDelegate();
+        user = new User();
     }
-    
+
     @After
     public void tearDown() {
+        instance = null;
+        user = null;
     }
 
     /**
      * Test of reviewSelectUser method, of class UserDelegate.
      */
     @Test
-    public void testReviewSelectUser() {
+    public void testReviewSelectUser() throws Exception {
         System.out.println("reviewSelectUser");
-        UserDelegate instance = new UserDelegate();
-        User user = new User();
-        List<User> expResult = instance.reviewSelectUser();
-        user.setAll("user", "pass", "User", "manager");
-        expResult.add(user);
-        
-        List<User> result = instance.reviewSelectUser();
-        assertNotSame(expResult.size(), result.size());
+        user.setAll("John", "password", "John Doe", "manager");
+        instance.processCreate(user);
+        User expUser = instance.loadUser(user.getId());
+        assertNotNull(expUser);
+        //delete
+        instance.processDelete(user.getId());
     }
+    
+    
 
     /**
      * Test of processCreate method, of class UserDelegate.
@@ -67,10 +74,10 @@ public class UserDelegateTest {
     @Test
     public void testProcessCreate() throws Exception {
         System.out.println("processCreate");
-        User user = new User();
         user.setAll("John", "password", "John Doe", "manager");
-        UserDelegate instance = new UserDelegate();
         instance.processCreate(user);
+        User expUser = instance.loadUser("John");
+        assertNotNull(expUser);
     }
 
     /**
@@ -79,10 +86,14 @@ public class UserDelegateTest {
     @Test
     public void testProcessModify() throws Exception {
         System.out.println("processModify");
-        User user = new User();
-        user.setId("Sam");
-        UserDelegate instance = new UserDelegate();
+        user.setAll("John", "password", "John Doe", "manager");
+        instance.processCreate(user);
+        user.setId("John");
+        user.setName("John Snow");
+        user.setPassword("John");
         instance.processModify(user);
+        User expUser = instance.loadUser("John");
+        assertEquals(user.getName(), expUser.getName());
     }
 
     /**
@@ -91,9 +102,15 @@ public class UserDelegateTest {
     @Test
     public void testProcessDelete() throws Exception {
         System.out.println("processDelete");
-        String id = "User1";
-        UserDelegate instance = new UserDelegate();
+        String id = "John";
         instance.processDelete(id);
+        User expUser = null;
+        try {
+            expUser = instance.loadUser("John");
+        } catch (Exception e) {
+            assertNull(expUser);
+        }
+
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
@@ -105,16 +122,14 @@ public class UserDelegateTest {
     public void testLoadUser() throws Exception {
         System.out.println("loadUser");
         String id = "User1";
-        UserDelegate instance = new UserDelegate();
         User expResult = new User();
-        
+
         expResult.setAll(id, "password", "John Doe", "manager");
-        instance.processCreate(expResult);
+//        instance.processCreate(expResult);
 
         User result = instance.loadUser(id);
         assertEquals(expResult.getId(), result.getId());
         assertEquals(expResult.getName(), result.getName());
         assertEquals(expResult.getPassword(), result.getPassword());
     }
-    
 }
