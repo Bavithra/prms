@@ -112,8 +112,7 @@ public class ScheduleService {
 
     /**
      * Method to delete the upcoming schedules attached to a radio program. Only
-     * the upcoming schedules are deleted, & not the past ones.
-     *
+     * the upcoming schedules are deleted, and not the past ones.
      * @param name The name of the radio program for which the schedules need to
      * be deleted.
      */

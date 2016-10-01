@@ -117,7 +117,7 @@ public class ProgramSlot {
     }
 
     /**
-     * Method to get the formatted end time from the startDateTime & duration of
+     * Method to get the formatted end time from the startDateTime and duration of
      * the program.
      *
      * @return Formatted end time in "HH:mm" format.
