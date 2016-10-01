@@ -49,7 +49,7 @@
                     <tr>
                         <td><fmt:message key="label.createprogramslot.year" /></td>
                         <td>
-                            <select name="year" onchange="updateDateLimit()" id="yearpicker">
+                            <select name="year" onload="updateDateLimit()" onchange="updateDateLimit()" id="yearpicker">
                                 <c:forEach var="year" items="${yearList}">
                                     <option value="${year.getYear()}">${year.getYear()}</option>
                                 </c:forEach>
@@ -108,7 +108,6 @@
         <script>
             $(function () {
                 initCustomDatePicker();
-                customDatePickerEventHandler();
             });
             function initCustomDatePicker() {
                 document.getElementById("flatpickr").flatpickr();
@@ -124,13 +123,6 @@
                             to: new Date(year, 11, 31)
                         }
                     ]
-                });
-            }
-            function customDatePickerEventHandler() {
-                document.getElementById("flatpickr").flatpickr({
-                    enableTime: true,
-                    onChange: function (dateObj, dateStr, instance) {
-                    }
                 });
             }
         </script>
