@@ -5,6 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import defaultExceptions.ProgramSlotExistsException;
 import java.sql.SQLException;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
@@ -40,7 +41,7 @@ public class ScheduleDelegate {
      * @param valueObject The program slot object that will be added to the dB.
      * @throws SQLException If something goes wrong during adding the slot.
      */
-    public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException {
+    public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException, ProgramSlotExistsException {
         service.processCreateProgramSlot(valueObject);
     }
 

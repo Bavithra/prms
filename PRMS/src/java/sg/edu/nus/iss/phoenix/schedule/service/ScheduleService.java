@@ -5,7 +5,9 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.service;
 
+import defaultExceptions.ProgramSlotExistsException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
@@ -70,8 +72,13 @@ public class ScheduleService {
      * @param valueObject The program slot object that will be added to the dB.
      * @throws SQLException If something goes wrong during adding the slot.
      */
-    public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException {
-        scheduleDAO.create(valueObject);
+    public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException, ProgramSlotExistsException {
+        // Here we need to check if a program slot already exists with the same time
+        if(checkProgramSlotOverlaps(valueObject)) {
+            throw new ProgramSlotExistsException("Program exists");
+        }else {
+            scheduleDAO.create(valueObject);
+        }
     }
 
     /**
@@ -125,33 +132,25 @@ public class ScheduleService {
      * @param programSlot The program slot that needs to be checked.
      * @return True if there is an overlap, else false.
      */
-//    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws NullPointerException {
-//        if(programSlot != null) {
-//            // Get all the existing program slots & run the loop
-//            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
-//            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
-//                
-//                Date existingStartDate = existingProgramSlot.getDateOfProgram();
-//                existingStartDate.setTime(existingProgramSlot.getStartTime().getTime());
-//                
-//                Date existingEndDate = existingProgramSlot.getDateOfProgram();
-//                existingEndDate.setTime(existingProgramSlot.getStartTime().getTime() + existingProgramSlot.getDuration().getTime());
-//                
-//                // The current program slot
-//                Date currentStartDate = programSlot.getDateOfProgram();
-//                currentStartDate.setTime(programSlot.getStartTime().getTime());
-//                
-//                Date currentEndDate = programSlot.getDateOfProgram();
-//                currentEndDate.setTime(programSlot.getStartTime().getTime() + programSlot.getDuration().getTime());
-//                
-//                if((existingStartDate.before(currentEndDate)) && 
-//                        (existingEndDate.after(currentEndDate))) {
-//                    return true;
-//                }
-//            }
-//            // Return the value accordingly
-//            return false;
-//        }
-//        throw new NullPointerException();
-//    }
+    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws SQLException {
+        if(programSlot != null) {
+            // Get all the existing program slots & run the loop
+            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
+            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
+                
+                LocalDateTime existingEndDateTime = existingProgramSlot.getStartDateTime().plusHours(existingProgramSlot.getRadioProgram().getTypicalDuration().getHours());
+                existingEndDateTime = existingEndDateTime.plusMinutes(existingProgramSlot.getRadioProgram().getTypicalDuration().getMinutes());
+                
+                LocalDateTime endDateTime = programSlot.getStartDateTime().plusHours(programSlot.getRadioProgram().getTypicalDuration().getHours());
+                endDateTime = endDateTime.plusMinutes(programSlot.getRadioProgram().getTypicalDuration().getMinutes());
+                
+                if((programSlot.getStartDateTime().isBefore(existingEndDateTime) || programSlot.getStartDateTime().isEqual(existingEndDateTime)) && 
+                        (endDateTime.isAfter(existingEndDateTime) || endDateTime.isEqual(existingEndDateTime))) {
+                    return true;
+                }
+            }
+        }
+        // Return the value accordingly
+            return false;
+    }
 }
