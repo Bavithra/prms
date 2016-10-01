@@ -51,9 +51,9 @@ public class UserService {
     /**
      * ************************************************
      */
+    
     /**
      * Method to get all user present in the database.
-     *
      * @return List containing all users present in database.
      */
     public List<User> reviewSelectUser() {
@@ -65,44 +65,43 @@ public class UserService {
         }
         return data;
     }
-
-    public void processCreate(User user) {
-        try {
+    
+    /**
+     * Method to create a user.
+     * @param user The user object that needs to be created.
+     * @throws SQLException If all the required parameters are not found.
+     */
+    public void processCreate(User user) throws SQLException {
             userDao.create(user);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
-    public void processModify(User user) {
-
-        try {
+    /**
+     * Method to modify an existing user.
+     * @param user The user object that needs to be modified.
+     * @throws NotFoundException If the user is not existing in database.
+     * @throws SQLException If all the required parameters are not found.
+     */
+    public void processModify(User user) throws NotFoundException, SQLException {
             userDao.save(user);
-        } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
     }
 
-    public void processDelete(String id) {
-
-        try {
+    /**
+     * Method to delete an existing user.
+     * @param id The id of the existing user.
+     * @throws NotFoundException If the user is not found in database.
+     * @throws SQLException If the user cannot be deleted since it is a foreign key.
+     */
+    public void processDelete(String id) throws NotFoundException, SQLException {
             User user = userDao.getObject(id);
             userDao.delete(user);
-        } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
     
+    /**
+     * Method to retrieve a user from database.
+     * @param id The id of the user that needs to be retrieved.
+     * @return The user object attached to the id.
+     * @throws NotFoundException If the id is not found.
+     */
     public User loadUser(String id) throws NotFoundException {
         try {
             return userDao.getObject(id);

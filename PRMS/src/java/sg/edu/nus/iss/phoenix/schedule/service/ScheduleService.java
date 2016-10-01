@@ -21,52 +21,81 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
  */
 public class ScheduleService {
 
+    /**
+     * ********************************
+     */
+    // Instance Variables
+    /**
+     * ********************************
+     */
     DAOFactoryImpl factory;
     YearDAO yeardao;
     ScheduleDAO scheduleDAO;
 
+    /**
+     * ********************************
+     */
+    // Constructor
+    /**
+     * ********************************
+     */
     public ScheduleService() {
         factory = new DAOFactoryImpl();
         yeardao = factory.getYearDAO();
         scheduleDAO = factory.getScheduleDAO();
     }
 
-    public void processCreateYear(Year valueObject) {
-        try {
-            yeardao.create(valueObject);
-        } catch (SQLException ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    /**
+     * ********************************
+     */
+    // Public Methods
+    /**
+     * ********************************
+     */
+    
+    /**
+     * Method to create a new annual schedule.
+     *
+     * @param valueObject The annual schedule object that will be added to the
+     * dB.
+     * @throws SQLException If something goes wrong during adding the slot.
+     */
+    public void processCreateYear(Year valueObject) throws SQLException {
+        yeardao.create(valueObject);
     }
 
-    public void processCreateProgramSlot(ProgramSlot valueObject) {
-        try {
-            // First check for overlap
-            //if(!checkProgramSlotOverlaps(valueObject)) {
-            // If there is no overlap, then proceed to create the program slot.
-            scheduleDAO.create(valueObject);
-            //}
-        } catch (SQLException ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    /**
+     * Method to create a new program slot.
+     *
+     * @param valueObject The program slot object that will be added to the dB.
+     * @throws SQLException If something goes wrong during adding the slot.
+     */
+    public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException {
+        scheduleDAO.create(valueObject);
     }
 
-    public void processUpdateProgramSlot(ProgramSlot valueObject) {
-        try {
-            scheduleDAO.save(valueObject);
-        } catch (SQLException ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotFoundException ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    /**
+     * Method to modify an existing program slot.
+     *
+     * @param valueObject The updated program slot with the modified parameters.
+     * @throws NotFoundException If the program slot does not exist already in
+     * dB.
+     * @throws SQLException If something went wrong during the modification.
+     */
+    public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException {
+        scheduleDAO.save(valueObject);
     }
 
-    public void processDeleteProgramSlot(int id) {
-        try {
-            scheduleDAO.delete(id);
-        } catch (Exception ex) {
-            Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    /**
+     * Method to delete an existing program slot.
+     *
+     * @param id The id of the program slot that needs to be deleted.
+     * @throws NotFoundException If the program slot does not exist already in
+     * dB.
+     * @throws SQLException If something went wrong during the deletion.
+     */
+    public void processDeleteProgramSlot(int id) throws NotFoundException, SQLException {
+        scheduleDAO.delete(id);
     }
 
     /**
@@ -81,7 +110,7 @@ public class ScheduleService {
             for (ProgramSlot programSlot : scheduleDAO.loadAll()) {
                 if (programSlot.getRadioProgram().getName().equals(name)) {
                     // Here we have to add the check if it is already past today's date.
-                    scheduleDAO.delete(programSlot.getId());
+                    //scheduleDAO.delete(programSlot.getId());
                 }
             }
         } catch (SQLException ex) {

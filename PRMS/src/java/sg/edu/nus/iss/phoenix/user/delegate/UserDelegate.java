@@ -5,6 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.user.delegate;
 
+import java.sql.SQLException;
 import java.util.List;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
@@ -33,9 +34,9 @@ public class UserDelegate {
     /**
      * ************************************************
      */
+    
     /**
      * Method to get all the users present in the database.
-     *
      * @return List containing users present in database.
      */
     public List<User> reviewSelectUser() {
@@ -43,23 +44,44 @@ public class UserDelegate {
         return service.reviewSelectUser();
     }
 
-    public void processCreate(User user) {
+    /**
+     * Method to create a user.
+     * @param user The user object that needs to be created.
+     * @throws SQLException If all the required parameters are not found.
+     */
+    public void processCreate(User user) throws SQLException {
         UserService service = new UserService();
         service.processCreate(user);
-
     }
 
-    public void processModify(User user) {
+    /**
+     * Method to modify an existing user.
+     * @param user The user object that needs to be modified.
+     * @throws NotFoundException If the user is not existing in database.
+     * @throws SQLException If all the required parameters are not found.
+     */
+    public void processModify(User user) throws NotFoundException, SQLException {
         UserService service = new UserService();
         service.processModify(user);
-
     }
 
-    public void processDelete(String id) {
+    /**
+     * Method to delete an existing user.
+     * @param id The id of the existing user.
+     * @throws NotFoundException If the user is not found in database.
+     * @throws SQLException If the user cannot be deleted since it is a foreign key.
+     */
+    public void processDelete(String id) throws NotFoundException, SQLException {
         UserService service = new UserService();
         service.processDelete(id);
     }
     
+    /**
+     * Method to retrieve a user from database.
+     * @param id The id of the user that needs to be retrieved.
+     * @return The user object attached to the id.
+     * @throws NotFoundException If the id is not found.
+     */
     public User loadUser(String id) throws NotFoundException {
         UserService service = new UserService();
         return service.loadUser(id);

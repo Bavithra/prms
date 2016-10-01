@@ -6,8 +6,6 @@
 package sg.edu.nus.iss.phoenix.schedule.service;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import java.util.List;
 import sg.edu.nus.iss.phoenix.core.dao.DAOFactoryImpl;
@@ -32,23 +30,25 @@ public class ReviewSelectScheduleService {
         scheduledao = factory.getScheduleDAO();
     }
 
-    public List<Year> reviewSelectYear() {
+    /**
+     * Method to load all the annual schedules present in dB.
+     * @return List containing all the annual schedules.
+     * @throws SQLException If something went wrong during the retrieval.
+     */
+    public List<Year> reviewSelectYear() throws SQLException {
         List<Year> data = null;
-        try {
-            data = yeardao.loadAll();
-        } catch (SQLException ex) {
-            Logger.getLogger(ReviewSelectScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        data = yeardao.loadAll();
         return data;
     }
-    
-    public List<ProgramSlot> reviewSelectSchedule(){
+
+    /**
+     * Method to load all the program slots present in dB.
+     * @return List containing all the program slots.
+     * @throws SQLException If something went wrong during the retrieval.
+     */
+    public List<ProgramSlot> reviewSelectSchedule() throws SQLException {
         List<ProgramSlot> data = null;
-        try{
-            data= scheduledao.loadAll();
-        }catch (SQLException ex) {
-            Logger.getLogger(ReviewSelectScheduleService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        data = scheduledao.loadAll();
         return data;
     }
 

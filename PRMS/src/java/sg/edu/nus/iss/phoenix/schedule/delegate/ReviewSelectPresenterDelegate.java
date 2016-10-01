@@ -5,6 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import java.sql.SQLException;
 import java.util.List;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectUserService;
@@ -24,7 +25,7 @@ public class ReviewSelectPresenterDelegate {
      * retrieve all the Presenter
      * @return 
      */
-    public List<User> reviewSelectPresenter() {
+    public List<User> reviewSelectPresenter() throws SQLException {
         return service.reviewSelectPresenter();
     }
 }

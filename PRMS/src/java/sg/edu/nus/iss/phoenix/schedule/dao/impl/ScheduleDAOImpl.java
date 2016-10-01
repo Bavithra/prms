@@ -54,6 +54,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     /**
      * *********************************
      */
+    
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
         String sql = "";
@@ -81,6 +82,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
+    @Override
     public ProgramSlot load(int id) throws NotFoundException, SQLException {
         String sql = "SELECT * FROM `radio-program-slot` WHERE `id` = ?; ";
         PreparedStatement stmt = null;
@@ -110,6 +112,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         return radioProgramSlot;
     }
 
+    @Override
     public List<ProgramSlot> loadAll() throws SQLException {
         String sql = "SELECT * FROM `radio-program-slot`; ";
         PreparedStatement stmt = null;
@@ -128,6 +131,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
+    @Override
     public void save(ProgramSlot valueObject) throws NotFoundException, SQLException {
 
         String sql = "UPDATE `radio-program-slot` SET `startDateTime` = ?, `radioProgram` = ?, `presenter`=?, `producer`=? WHERE `id` = ? ; ";
@@ -162,8 +166,8 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
-    public void delete(int id)
-            throws SQLException {
+    @Override
+    public void delete(int id) throws NotFoundException, SQLException {
         String sql = "DELETE FROM `radio-program-slot` WHERE `id` = ? ;";
         PreparedStatement stmt = null;
         openConnection();
@@ -183,6 +187,8 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
+    
+    @Override
     public void deleteAll() throws SQLException {
 
     }
@@ -193,6 +199,10 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     // Private Method Implementation
     /**
      * *********************************
+     */
+    
+    /**
+     * Method to open the dB connection.
      */
     private void openConnection() {
         try {
@@ -211,6 +221,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
     
+    /**
+     * Method to close the dB connection.
+     */
     private void closeConnection() {
         try {
             this.connection.close();
@@ -220,6 +233,13 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
+    /**
+     * Method to perform a list query.
+     * @param stmt The statement that needs to be executed to get the list of items.
+     * @return The list of program slots.
+     * @throws SQLException
+     * @throws NotFoundException 
+     */
     protected List<ProgramSlot> listQuery(PreparedStatement stmt) throws SQLException, NotFoundException {
         ArrayList<ProgramSlot> searchResults = new ArrayList<ProgramSlot>();
 
@@ -243,6 +263,13 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         return searchResults;
     }
 
+    /**
+     * Method to retrieve program slot from result set.
+     * @param result The result from which the program slot object needs to be retrieved.
+     * @return The program slot retrieved from the result set.
+     * @throws SQLException
+     * @throws NotFoundException 
+     */
     private ProgramSlot getProgramSlot(ResultSet result) throws SQLException, NotFoundException {
 
         UserDaoImpl userDaoImpl = new UserDaoImpl();

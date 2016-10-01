@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import java.sql.SQLException;
 import java.util.List;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.Year;
@@ -17,7 +18,7 @@ public class ReviewSelectScheduleDelegate {
      * retrieve all the programSlot
      * @return 
      */
-    public List<ProgramSlot> reviewSelectProgramSlot() {
+    public List<ProgramSlot> reviewSelectProgramSlot() throws SQLException {
         return service.reviewSelectSchedule();
     }
 
@@ -25,7 +26,7 @@ public class ReviewSelectScheduleDelegate {
      * show all the created year
      * @return 
      */
-    public List<Year> reviewExistingYear() {
+    public List<Year> reviewExistingYear() throws SQLException {
         return service.reviewSelectYear();
     }
 
