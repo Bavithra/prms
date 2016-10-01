@@ -5,20 +5,13 @@
  */
 package sg.edu.nus.iss.phoenix.user.delegate;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sg.edu.nus.iss.phoenix.authenticate.entity.Role;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
-import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 
 /**
  *
@@ -58,15 +51,14 @@ public class UserDelegateTest {
     @Test
     public void testReviewSelectUser() throws Exception {
         System.out.println("reviewSelectUser");
-        user.setAll("John", "password", "John Doe", "manager");
+        user.setAll("TestGuy", "password", "TestGuy Doe", "manager");
         instance.processCreate(user);
+        //test
         User expUser = instance.loadUser(user.getId());
         assertNotNull(expUser);
         //delete
         instance.processDelete(user.getId());
     }
-    
-    
 
     /**
      * Test of processCreate method, of class UserDelegate.
@@ -74,10 +66,13 @@ public class UserDelegateTest {
     @Test
     public void testProcessCreate() throws Exception {
         System.out.println("processCreate");
-        user.setAll("John", "password", "John Doe", "manager");
+        user.setAll("TestGuy", "password", "TestGuy Doe", "manager");
         instance.processCreate(user);
-        User expUser = instance.loadUser("John");
+        //test
+        User expUser = instance.loadUser("TestGuy");
         assertNotNull(expUser);
+        //delete
+        instance.processDelete(user.getId());
     }
 
     /**
@@ -86,14 +81,17 @@ public class UserDelegateTest {
     @Test
     public void testProcessModify() throws Exception {
         System.out.println("processModify");
-        user.setAll("John", "password", "John Doe", "manager");
+        user.setAll("TestGuy", "password", "TestGuy Doe", "manager");
         instance.processCreate(user);
-        user.setId("John");
-        user.setName("John Snow");
-        user.setPassword("John");
+        //test
+        user.setId("TestGuy");
+        user.setName("TestGuy Snow");
+        user.setPassword("TestGuy");
         instance.processModify(user);
-        User expUser = instance.loadUser("John");
+        User expUser = instance.loadUser("TestGuy");
         assertEquals(user.getName(), expUser.getName());
+        //delete
+        instance.processDelete(user.getId());
     }
 
     /**
@@ -102,15 +100,18 @@ public class UserDelegateTest {
     @Test
     public void testProcessDelete() throws Exception {
         System.out.println("processDelete");
-        String id = "John";
-        instance.processDelete(id);
+        user.setAll("TestGuy", "password", "TestGuy Doe", "manager");
+        instance.processCreate(user);
+        //test
+        instance.processDelete(user.getId());
         User expUser = null;
         try {
-            expUser = instance.loadUser("John");
+            expUser = instance.loadUser("TestGuy");
+            assertNull(expUser);
         } catch (Exception e) {
             assertNull(expUser);
+        } finally {
         }
-
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
@@ -121,15 +122,20 @@ public class UserDelegateTest {
     @Test
     public void testLoadUser() throws Exception {
         System.out.println("loadUser");
-        String id = "User1";
+        user.setAll("TestGuy", "password", "TestGuy Doe", "manager");
+        instance.processCreate(user);
+        //test
+        String id = "TestGuy";
         User expResult = new User();
 
-        expResult.setAll(id, "password", "John Doe", "manager");
+        expResult.setAll(id, "password", "TestGuy Doe", "manager");
 //        instance.processCreate(expResult);
 
         User result = instance.loadUser(id);
         assertEquals(expResult.getId(), result.getId());
         assertEquals(expResult.getName(), result.getName());
         assertEquals(expResult.getPassword(), result.getPassword());
+        //delelte
+        instance.processDelete(user.getId());
     }
 }
