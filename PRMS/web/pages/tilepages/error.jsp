@@ -11,4 +11,7 @@
 	<h2>
 		<fmt:message key="error.incorrectLogin" />
 	</h2>
+        <div>
+            ${error}
+        </div>
 </body>

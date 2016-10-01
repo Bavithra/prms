@@ -32,6 +32,7 @@ public class LoginCmd implements Perform {
             req.getSession().setAttribute("user", user);
             return "/pages/home.jsp";
         } else
+            req.setAttribute("error", "Incorrect login");
             return "/pages/error.jsp";
     }
 }
