@@ -89,8 +89,13 @@ public class ScheduleService {
      * dB.
      * @throws SQLException If something went wrong during the modification.
      */
-    public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException {
-        scheduleDAO.save(valueObject);
+    public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException, ProgramSlotExistsException {
+        if(checkProgramSlotOverlaps(valueObject)) {
+            throw new ProgramSlotExistsException("Program exists");
+        }else {
+            scheduleDAO.save(valueObject);
+        }
+        
     }
 
     /**
