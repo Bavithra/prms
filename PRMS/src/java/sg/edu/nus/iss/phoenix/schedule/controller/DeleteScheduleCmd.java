@@ -32,11 +32,20 @@ public class DeleteScheduleCmd implements Perform {
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ScheduleDelegate scheduleDelegate = new ScheduleDelegate();
         String id = req.getParameter("id");
-        scheduleDelegate.processDeleteProgramSlot(Integer.valueOf(id));
-        
+        try {
+            scheduleDelegate.processDeleteProgramSlot(Integer.valueOf(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
-        req.setAttribute("scheduleList", data);
+        try {
+            List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
+            req.setAttribute("scheduleList", data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "/pages/crudschedule.jsp";
     }
 

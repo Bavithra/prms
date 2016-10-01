@@ -25,10 +25,15 @@ public class ManageAnnualScheduleCmd implements Perform{
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ReviewSelectScheduleDelegate delegate = new ReviewSelectScheduleDelegate();
-        List<Year> years = delegate.reviewExistingYear();
+        try {
+            List<Year> years = delegate.reviewExistingYear();
         if(years!=null){
             req.setAttribute("years", years);
         }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         return "/pages/cryear.jsp";
     }
     

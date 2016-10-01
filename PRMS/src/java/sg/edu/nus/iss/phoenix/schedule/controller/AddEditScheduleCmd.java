@@ -25,26 +25,30 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
  * @author linby
  */
 @Action("addeditschedule")
-public class AddEditScheduleCmd implements Perform{
-   @Override
+public class AddEditScheduleCmd implements Perform {
+
+    @Override
     public String perform(String path, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        
+
         ReviewSelectProgramDelegate reviewSelectProgramDelegate = new ReviewSelectProgramDelegate();
         List<RadioProgram> radioProgramList = reviewSelectProgramDelegate.reviewSelectRadioProgram();
-        req.setAttribute("programlist",radioProgramList);
-        
-        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate= new ReviewSelectScheduleDelegate();
-        List<Year> yearList = reviewSelectScheduleDelegate.reviewExistingYear();
-        req.setAttribute("yearList", yearList);
-        
+        req.setAttribute("programlist", radioProgramList);
+
+        ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
         ReviewSelectProducerDelegate reviewSelectProducerDelegate = new ReviewSelectProducerDelegate();
-        List<User> producerList = reviewSelectProducerDelegate.reviewProducer();
-        req.setAttribute("producerList",producerList);
-        
         ReviewSelectPresenterDelegate reviewSelectPresenterDelegate = new ReviewSelectPresenterDelegate();
-        List<User> presenterList = reviewSelectPresenterDelegate.reviewSelectPresenter();        
-        req.setAttribute("presenterList",presenterList);
-        
+
+        try {
+            List<Year> yearList = reviewSelectScheduleDelegate.reviewExistingYear();
+            req.setAttribute("yearList", yearList);
+            List<User> producerList = reviewSelectProducerDelegate.reviewProducer();
+            req.setAttribute("producerList", producerList);
+            List<User> presenterList = reviewSelectPresenterDelegate.reviewSelectPresenter();
+            req.setAttribute("presenterList", presenterList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return "/pages/createprogramslot.jsp";
     }
 }

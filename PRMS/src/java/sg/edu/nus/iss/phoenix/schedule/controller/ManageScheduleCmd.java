@@ -20,14 +20,18 @@ import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
  * @author linby
  */
 @Action("manageschedule")
-public class ManageScheduleCmd implements Perform{
+public class ManageScheduleCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
-        req.setAttribute("scheduleList", data);
+        try {
+            List<ProgramSlot> data = reviewSelectScheduleDelegate.reviewSelectProgramSlot();
+            req.setAttribute("scheduleList", data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "/pages/crudschedule.jsp";
     }
-    
+
 }

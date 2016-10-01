@@ -22,7 +22,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
  * @author linby
  */
 @Action("enteryear")
-public class EnterYearCmd implements Perform{
+public class EnterYearCmd implements Perform {
 
     @Override
     public String perform(String string, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -30,17 +30,27 @@ public class EnterYearCmd implements Perform{
         Year year = new Year();
         year.setYear(Integer.valueOf(req.getParameter("year")));
         User user = (User) req.getSession().getAttribute("user");
-        if(user != null) {
+        if (user != null) {
             year.setAssignedBy(user.getId());
         }
-        del.processCreateYear(year);
+        try {
+            del.processCreateYear(year);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //show cryear screen and retrieve data
         ReviewSelectScheduleDelegate rsdel = new ReviewSelectScheduleDelegate();
-        List<Year> years = rsdel.reviewExistingYear();
-        if(years!=null){
-            req.setAttribute("years", years);
+        try {
+            List<Year> years = rsdel.reviewExistingYear();
+            if (years != null) {
+                req.setAttribute("years", years);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return "/pages/cryear.jsp";
     }
-    
+
 }
