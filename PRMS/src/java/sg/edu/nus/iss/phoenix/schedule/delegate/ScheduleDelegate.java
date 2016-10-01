@@ -65,7 +65,7 @@ public class ScheduleDelegate {
      * dB.
      * @throws SQLException If something went wrong during the modification.
      */
-    public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException {
+    public void processUpdateProgramSlot(ProgramSlot valueObject) throws ProgramSlotExistsException,NotFoundException, SQLException {
         service.processUpdateProgramSlot(valueObject);
     }
 }

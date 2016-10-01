@@ -33,9 +33,16 @@ public class DeleteUserCmd implements Perform {
             userDelegate.processDelete(id);
         } catch (NotFoundException e) {
             e.printStackTrace();
+            req.setAttribute("error", "The user is already deleted");
+            return "/pages/error.jsp";
         } catch (SQLException e) {
             e.printStackTrace();
-            // Here we need to display the error message.
+            req.setAttribute("error", "Cannot delete the user who is already assigned in schedule");
+            return "/pages/error.jsp";
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.setAttribute("error", "Fatal Exception:"+e.getMessage());
+            return "/pages/error.jsp";
         }
         // Navigation
         List<User> data = userDelegate.reviewSelectUser();

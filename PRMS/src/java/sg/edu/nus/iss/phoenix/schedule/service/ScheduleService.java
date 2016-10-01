@@ -75,7 +75,7 @@ public class ScheduleService {
     public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException, ProgramSlotExistsException {
         // Here we need to check if a program slot already exists with the same time
         if(checkProgramSlotOverlaps(valueObject)) {
-            throw new ProgramSlotExistsException("Program exists");
+            throw new ProgramSlotExistsException("This program slot is already assigned");
         }else {
             scheduleDAO.create(valueObject);
         }
@@ -91,7 +91,7 @@ public class ScheduleService {
      */
     public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException, ProgramSlotExistsException {
         if(checkProgramSlotOverlaps(valueObject)) {
-            throw new ProgramSlotExistsException("Program exists");
+            throw new ProgramSlotExistsException("This program slot is already assigned");
         }else {
             scheduleDAO.save(valueObject);
         }

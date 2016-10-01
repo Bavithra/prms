@@ -1,5 +1,7 @@
 package sg.edu.nus.iss.phoenix.radioprogram.delegate;
 
+import java.sql.SQLException;
+import sg.edu.nus.iss.phoenix.core.exceptions.NotFoundException;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.radioprogram.service.ProgramService;
 
@@ -42,7 +44,7 @@ public class ProgramDelegate {
 		
 	}
 
-	public void processDelete(String name) {
+	public void processDelete(String name) throws NotFoundException,SQLException {
 		ProgramService service = new ProgramService();
 		service.processDelete(name);
 	}

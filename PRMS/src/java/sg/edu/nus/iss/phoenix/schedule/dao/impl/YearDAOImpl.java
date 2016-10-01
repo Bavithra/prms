@@ -30,7 +30,7 @@ public class YearDAOImpl implements YearDAO {
         PreparedStatement stmt = null;
         openConnection();
         try {
-            sql = "INSERT INTO `annual-schedule` (`year`, `assignedBy`) VALUES (?,?); ";
+            sql = "INSERT INTO `annual-schedule` (`year`, `assingedBy`) VALUES (?,?); ";
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, valueObject.getYear());
             stmt.setString(2, valueObject.getAssignedBy());
@@ -71,7 +71,7 @@ public class YearDAOImpl implements YearDAO {
 
             while (result.next()) {
                 Year temp = new Year();
-                temp.setAssignedBy(result.getString("assignedBy"));
+                temp.setAssignedBy(result.getString("assingedBy"));
                 temp.setYear(result.getInt("Year"));
                 searchResults.add(temp);
             }

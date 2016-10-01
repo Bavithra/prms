@@ -7,6 +7,7 @@ package sg.edu.nus.iss.phoenix.schedule.controller;
 
 import at.nocturne.api.Action;
 import at.nocturne.api.Perform;
+import defaultExceptions.ProgramSlotExistsException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,7 +45,7 @@ public class EnterScheduleCmd implements Perform {
             programSlot.setProducer(userDelegate.loadUser(req.getParameter("producer")));
             programSlot.setRadioProgram(programDelegate.loadRadioProgram(req.getParameter("program")));
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
 
         }
@@ -54,8 +55,14 @@ public class EnterScheduleCmd implements Perform {
             //insert
             try {
                 scheduleDelegate.processCreateProgramSlot(programSlot);
+            } catch (ProgramSlotExistsException e) {
+                e.printStackTrace();
+                req.setAttribute("error", e.getMessage());
+                return "/pages/error.jsp";
             } catch (Exception e) {
                 e.printStackTrace();
+                req.setAttribute("error", "Fatal Exception:" + e.getMessage());
+                return "/pages/error.jsp";
             }
         } else {
             //update
@@ -63,8 +70,14 @@ public class EnterScheduleCmd implements Perform {
             programSlot.setId(Integer.valueOf(id));
             try {
                 scheduleDelegate.processUpdateProgramSlot(programSlot);
+            } catch (ProgramSlotExistsException e) {
+                e.printStackTrace();
+                req.setAttribute("error", e.getMessage());
+                return "/pages/error.jsp";
             } catch (Exception e) {
                 e.printStackTrace();
+                req.setAttribute("error", "Fatal Exception:" + e.getMessage());
+                return "/pages/error.jsp";
             }
         }
 

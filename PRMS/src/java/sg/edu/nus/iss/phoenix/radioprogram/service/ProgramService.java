@@ -93,21 +93,12 @@ public class ProgramService {
 		
 	}
 
-	public void processDelete(String name) {
-            try {
+	public void processDelete(String name) throws NotFoundException, SQLException {
                 ScheduleService scheduleService = new ScheduleService();
                 scheduleService.deleteUpcomingProgramSlotsForRadioProgram(name);
                 
                 RadioProgram rp = new RadioProgram(name);
                 rpdao.delete(rp);
-                // Also update the schedules accordingly.
-            } catch (NotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 	}
 
 }

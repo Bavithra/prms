@@ -36,6 +36,8 @@ public class DeleteScheduleCmd implements Perform {
             scheduleDelegate.processDeleteProgramSlot(Integer.valueOf(id));
         } catch (Exception e) {
             e.printStackTrace();
+            req.setAttribute("error", "Fatal Exception:"+e.getMessage());
+            return "/pages/error.jsp";
         }
 
         ReviewSelectScheduleDelegate reviewSelectScheduleDelegate = new ReviewSelectScheduleDelegate();
@@ -44,6 +46,8 @@ public class DeleteScheduleCmd implements Perform {
             req.setAttribute("scheduleList", data);
         } catch (Exception e) {
             e.printStackTrace();
+            req.setAttribute("error", e.getMessage());
+            return "/pages/crudschedule.jsp";
         }
 
         return "/pages/crudschedule.jsp";
