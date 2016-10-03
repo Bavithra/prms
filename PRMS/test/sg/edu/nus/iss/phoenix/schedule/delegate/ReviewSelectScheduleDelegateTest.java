@@ -5,6 +5,8 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,8 +14,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import sg.edu.nus.iss.phoenix.authenticate.entity.User;
+import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.entity.Year;
+import sg.edu.nus.iss.phoenix.schedule.service.ReviewSelectScheduleService;
+import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
 
 /**
  *
@@ -21,6 +29,11 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
  */
 public class ReviewSelectScheduleDelegateTest {
     
+    ReviewSelectScheduleService service;
+    ReviewSelectScheduleDelegate instance;
+    ProgramSlot programSlot;
+    User user;
+      
     public ReviewSelectScheduleDelegateTest() {
     }
     
@@ -34,6 +47,18 @@ public class ReviewSelectScheduleDelegateTest {
     
     @Before
     public void setUp() {
+        instance = mock(ReviewSelectScheduleDelegate.class);
+        programSlot = mock(ProgramSlot.class);
+        String dateString = "2016-10-10 20:00";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        programSlot.setStartDateTime(LocalDateTime.parse(dateString, formatter));
+        User presenter = new User();
+        presenter.setAll("TestPresenter", "tdd", "TestPresenter", "presenter");
+        User producer = new User();
+        producer.setAll("TestProducer", "tdd", "TestProducer", "producer");
+        programSlot.setPresenter(presenter);
+        programSlot.setProducer(producer);
+//        Mockito.when(instance.reviewSelectProgramSlot("TestGuy")).thenReturn(programSlot);
     }
     
     @After
