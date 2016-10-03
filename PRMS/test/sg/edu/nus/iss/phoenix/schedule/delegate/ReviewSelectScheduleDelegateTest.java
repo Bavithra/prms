@@ -5,8 +5,10 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.delegate;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,8 +16,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import sg.edu.nus.iss.phoenix.authenticate.dao.UserDao;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
@@ -29,10 +37,24 @@ import sg.edu.nus.iss.phoenix.user.delegate.UserDelegate;
  */
 public class ReviewSelectScheduleDelegateTest {
     
-    ReviewSelectScheduleService service;
+    @Mock
     ReviewSelectScheduleDelegate instance;
+    @Mock
+    UserDao userDAO;
+    @Mock
+    User presenter;
+    @Mock
+    User producer;
+    @Mock
     ProgramSlot programSlot;
-    User user;
+    @Mock
+    RadioProgram radioProgram;
+    @Mock
+    ScheduleDelegate scheduleDelegate;
+    
+    @Captor
+    ArgumentCaptor argCaptor;
+
       
     public ReviewSelectScheduleDelegateTest() {
     }
@@ -46,23 +68,37 @@ public class ReviewSelectScheduleDelegateTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
+        MockitoAnnotations.initMocks(this);
         instance = mock(ReviewSelectScheduleDelegate.class);
         programSlot = mock(ProgramSlot.class);
+        radioProgram = mock(RadioProgram.class);
+        scheduleDelegate = mock(ScheduleDelegate.class);
+        programSlot.setId(1);
+        radioProgram.setAll("TestProgram","TestDescription", Time.valueOf("00:30:00"));
         String dateString = "2016-10-10 20:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         programSlot.setStartDateTime(LocalDateTime.parse(dateString, formatter));
-        User presenter = new User();
+        programSlot.setRadioProgram(radioProgram);
+        presenter = mock(User.class);
         presenter.setAll("TestPresenter", "tdd", "TestPresenter", "presenter");
-        User producer = new User();
+        producer = mock(User.class);
         producer.setAll("TestProducer", "tdd", "TestProducer", "producer");
         programSlot.setPresenter(presenter);
         programSlot.setProducer(producer);
-//        Mockito.when(instance.reviewSelectProgramSlot("TestGuy")).thenReturn(programSlot);
+        List<ProgramSlot> list = new ArrayList<>();
+        list.add(programSlot);
+        Mockito.when(instance.reviewSelectProgramSlot()).thenReturn(list);
     }
     
     @After
     public void tearDown() {
+        instance = null;
+        presenter = null;
+        producer = null;
+        programSlot = null;
+        radioProgram = null;
+        scheduleDelegate = null;
     }
 
     /**
@@ -71,26 +107,12 @@ public class ReviewSelectScheduleDelegateTest {
     @Test
     public void testReviewSelectProgramSlot() throws Exception {
         System.out.println("reviewSelectProgramSlot");
-        ReviewSelectScheduleDelegate instance = new ReviewSelectScheduleDelegate();
-        List<ProgramSlot> expResult = null;
-        List<ProgramSlot> result = instance.reviewSelectProgramSlot();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of reviewExistingYear method, of class ReviewSelectScheduleDelegate.
-     */
-    @Test
-    public void testReviewExistingYear() throws Exception {
-        System.out.println("reviewExistingYear");
-        ReviewSelectScheduleDelegate instance = new ReviewSelectScheduleDelegate();
-        List<Year> expResult = null;
-        List<Year> result = instance.reviewExistingYear();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        scheduleDelegate.processCreateProgramSlot(programSlot);
+        //test
+        ProgramSlot expUser = instance.reviewSelectProgramSlot().get(0);
+        Mockito.verify(instance.reviewSelectProgramSlot().get(0));
+        assertNotNull(expUser);
+       
     }
     
 }
