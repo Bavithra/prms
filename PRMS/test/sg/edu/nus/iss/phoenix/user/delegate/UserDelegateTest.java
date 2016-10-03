@@ -5,7 +5,7 @@
  */
 package sg.edu.nus.iss.phoenix.user.delegate;
 
-import defaultExceptions.ProgramSlotExistsException;
+import java.sql.SQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -68,7 +68,7 @@ public class UserDelegateTest {
         instance.processCreate(user);
         //test
         User expUser = instance.loadUser("TestGuy");
-        Mockito.verify(instance).loadUser((String)argCaptor.capture());
+        Mockito.verify(instance).loadUser((String) argCaptor.capture());
         assertNotNull(expUser);
     }
 
@@ -77,23 +77,22 @@ public class UserDelegateTest {
         System.out.println("testIntIdForLoadUser");
         user.setAll("123", "password", "TestGuy Doe", "manager");
         Mockito.when(instance.loadUser("123")).thenReturn(user);
-        ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
         //test
         User expUser = instance.loadUser("123");
-        Mockito.verify(instance).loadUser(arg.capture());
+        Mockito.verify(instance).loadUser((String)argCaptor.capture());
         assertNotNull(expUser);
     }
 
     @Test
-    public void testDeleteUserWhenAssigned() throws Exception {
+    public void testDeleteUserWhenAssigned() throws Exception{
         System.out.println("testDeleteUserWhenAssigned");
-//        Mockito.when(instance.processDelete("abc")).thenThrow(new Exception());
-        Mockito.doThrow(new Exception("programExist")).when(instance).processDelete("TestGuy");
+        Mockito.doThrow(new SQLException("programExist")).when(instance).processDelete("TestGuy");
         //test
-        try{
+        try {
             instance.processDelete("TestGuy");
-        }catch(Exception e){
-            assertEquals("programExist",e.getMessage());
+            Mockito.verify(instance).processDelete((String)argCaptor.capture());
+        } catch (SQLException e) {
+            assertEquals("programExist", e.getMessage());
         }
     }
 
