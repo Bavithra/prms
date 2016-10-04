@@ -60,4 +60,18 @@ public interface ScheduleDAO {
      * @throws SQLException If something went wrong during the deletion.
      */
     public abstract void deleteAll() throws SQLException;
+    
+     /**
+     * Method to retrieve program slots of one particualr persenter.
+     * @throws SQLException If something went wrong during the retrieve data.
+     * @return list of programSlot which are assigned to current user
+     */
+    public abstract List<ProgramSlot> loadPresenterSchedule(String username) throws NotFoundException,SQLException;
+    
+    /**
+     * Method to retrieve program slots of one particualr producer.
+     * @throws SQLException If something went wrong during the retrieve data.
+     * @return list of programSlot which are assigned to current user
+     */
+    public abstract List<ProgramSlot> loadProducerSchedule(String username) throws NotFoundException,SQLException;
 }

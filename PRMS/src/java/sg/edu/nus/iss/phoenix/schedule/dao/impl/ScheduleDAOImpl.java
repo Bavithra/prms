@@ -54,7 +54,6 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     /**
      * *********************************
      */
-    
     @Override
     public void create(ProgramSlot valueObject) throws SQLException {
         String sql = "";
@@ -187,7 +186,6 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         }
     }
 
-    
     @Override
     public void deleteAll() throws SQLException {
 
@@ -200,7 +198,6 @@ public class ScheduleDAOImpl implements ScheduleDAO {
     /**
      * *********************************
      */
-    
     /**
      * Method to open the dB connection.
      */
@@ -220,7 +217,7 @@ public class ScheduleDAOImpl implements ScheduleDAO {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Method to close the dB connection.
      */
@@ -235,10 +232,12 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     /**
      * Method to perform a list query.
-     * @param stmt The statement that needs to be executed to get the list of items.
+     *
+     * @param stmt The statement that needs to be executed to get the list of
+     * items.
      * @return The list of program slots.
      * @throws SQLException
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     protected List<ProgramSlot> listQuery(PreparedStatement stmt) throws SQLException, NotFoundException {
         ArrayList<ProgramSlot> searchResults = new ArrayList<ProgramSlot>();
@@ -265,10 +264,12 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 
     /**
      * Method to retrieve program slot from result set.
-     * @param result The result from which the program slot object needs to be retrieved.
+     *
+     * @param result The result from which the program slot object needs to be
+     * retrieved.
      * @return The program slot retrieved from the result set.
      * @throws SQLException
-     * @throws NotFoundException 
+     * @throws NotFoundException
      */
     private ProgramSlot getProgramSlot(ResultSet result) throws SQLException, NotFoundException {
 
@@ -287,5 +288,67 @@ public class ScheduleDAOImpl implements ScheduleDAO {
         radioProgramSlot.setProducer(userDaoImpl.getObject(result.getString("producer")));
 
         return radioProgramSlot;
+    }
+
+    @Override
+    public List<ProgramSlot> loadPresenterSchedule(String username) throws NotFoundException,SQLException {
+        List<ProgramSlot> data = new ArrayList<>();
+        String sql = "SELECT * FROM `radio-program-slot` WHERE `presenter` = ?; ";
+        PreparedStatement stmt = null;
+
+        ResultSet result = null;
+        openConnection();
+
+        stmt = connection.prepareStatement(sql);
+        //condition parameter
+        stmt.setString(1, username);
+
+        try {
+            result = stmt.executeQuery();
+             while (result.next()) {
+                ProgramSlot temp = getProgramSlot(result);
+                data.add(temp);
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return data;
+    }
+
+    @Override
+    public List<ProgramSlot> loadProducerSchedule(String username) throws NotFoundException,SQLException {
+        List<ProgramSlot> data = null;
+        String sql = "SELECT * FROM `radio-program-slot` WHERE `producer` = ?; ";
+        PreparedStatement stmt = null;
+
+        ResultSet result = null;
+        openConnection();
+
+        stmt = connection.prepareStatement(sql);
+        //condition parameter
+        stmt.setString(1, username);
+
+        try {
+            result = stmt.executeQuery();
+             while (result.next()) {
+                ProgramSlot temp = getProgramSlot(result);
+                data.add(temp);
+            }
+        } finally {
+            if (result != null) {
+                result.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            closeConnection();
+        }
+        return data;
     }
 }

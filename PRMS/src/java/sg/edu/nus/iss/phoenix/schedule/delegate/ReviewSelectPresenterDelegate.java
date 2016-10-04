@@ -21,9 +21,10 @@ public class ReviewSelectPresenterDelegate {
         service = new ReviewSelectUserService();
     }
 
-    /**
-     * retrieve all the Presenter
-     * @return 
+     /**
+     * Method to load all the Presenter in dB.
+     * @return List containing all the annual schedules.
+     * @throws SQLException If something went wrong during the retrieval.
      */
     public List<User> reviewSelectPresenter() throws SQLException {
         return service.reviewSelectPresenter();
