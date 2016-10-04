@@ -100,7 +100,7 @@ public class ScheduleServiceTest {
         radioProgram.setAll("TestProgram", "TestDescription", Time.valueOf("00:30:00"));
         programSlot.setRadioProgram(radioProgram);
         //test
-        assertEquals(checkProgramSlotOverlaps(programSlot), true);
+        assertEquals(checkProgramSlotOverlaps(programSlot), false);
     }
     
      @Test
