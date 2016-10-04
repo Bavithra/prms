@@ -70,19 +70,13 @@ public class ReviewSelectScheduleDelegateTest {
     @Before
     public void setUp() throws Exception{
         MockitoAnnotations.initMocks(this);
-        instance = mock(ReviewSelectScheduleDelegate.class);
-        programSlot = mock(ProgramSlot.class);
-        radioProgram = mock(RadioProgram.class);
-        scheduleDelegate = mock(ScheduleDelegate.class);
         programSlot.setId(1);
         radioProgram.setAll("TestProgram","TestDescription", Time.valueOf("00:30:00"));
         String dateString = "2016-10-10 20:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         programSlot.setStartDateTime(LocalDateTime.parse(dateString, formatter));
         programSlot.setRadioProgram(radioProgram);
-        presenter = mock(User.class);
         presenter.setAll("TestPresenter", "tdd", "TestPresenter", "presenter");
-        producer = mock(User.class);
         producer.setAll("TestProducer", "tdd", "TestProducer", "producer");
         programSlot.setPresenter(presenter);
         programSlot.setProducer(producer);
