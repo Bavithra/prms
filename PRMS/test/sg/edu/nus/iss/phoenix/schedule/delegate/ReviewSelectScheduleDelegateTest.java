@@ -104,7 +104,7 @@ public class ReviewSelectScheduleDelegateTest {
         scheduleDelegate.processCreateProgramSlot(programSlot);
         //test
         ProgramSlot expUser = instance.reviewSelectProgramSlot().get(0);
-        Mockito.verify(instance.reviewSelectProgramSlot().get(0));
+        Mockito.verify(instance).reviewSelectProgramSlot();
         assertNotNull(expUser);
        
     }

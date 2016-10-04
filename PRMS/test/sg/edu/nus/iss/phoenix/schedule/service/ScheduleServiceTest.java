@@ -87,8 +87,9 @@ public class ScheduleServiceTest {
         programSlot.setRadioProgram(radioProgram);
         //test
         assertEquals(checkProgramSlotOverlaps(programSlot), false);
+        Mockito.verify(rsService).reviewSelectSchedule();
     }
-    
+
     @Test
     public void testCheckOverlapBoundry() throws Exception {
         System.out.println("testCheckOverlapBoundry");
@@ -101,9 +102,10 @@ public class ScheduleServiceTest {
         programSlot.setRadioProgram(radioProgram);
         //test
         assertEquals(checkProgramSlotOverlaps(programSlot), false);
+        Mockito.verify(rsService).reviewSelectSchedule();
     }
-    
-     @Test
+
+    @Test
     public void testCheckOverlapInclude() throws Exception {
         System.out.println("testCheckOverlapInclude");
         ProgramSlot programSlot = new ProgramSlot();
@@ -115,6 +117,7 @@ public class ScheduleServiceTest {
         programSlot.setRadioProgram(radioProgram);
         //test
         assertEquals(checkProgramSlotOverlaps(programSlot), true);
+        Mockito.verify(rsService).reviewSelectSchedule();
     }
 
     private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws SQLException {
