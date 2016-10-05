@@ -177,7 +177,6 @@ ADD CONSTRAINT `name`
 ALTER TABLE `phoenix`.`program-slot` 
 CHANGE COLUMN `startTime` `startTime` TIME NOT NULL ;
 
-ALTER TABLE `annual-schedule` CHANGE `assingedBy` `assignedBy` VARCHAR(45) NOT NULL;
 
 CREATE TABLE `phoenix`.`radio-program-slot` (
   `id` INT NOT NULL AUTO_INCREMENT,
