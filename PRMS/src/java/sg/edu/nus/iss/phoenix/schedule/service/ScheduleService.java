@@ -152,11 +152,11 @@ public class ScheduleService {
 //                        (endDateTime.isAfter(existingEndDateTime) || endDateTime.isEqual(existingEndDateTime))) {
 //                    return true;
 //                }
-                if ((programSlot.getStartDateTime().isBefore(existingProgramSlot.getStartDateTime()) && endDateTime.isBefore(existingProgramSlot.getStartDateTime()))||(programSlot.getStartDateTime().isAfter(existingEndDateTime) && endDateTime.isAfter(existingEndDateTime))) {
-                    return false;
+                if (!((programSlot.getStartDateTime().isBefore(existingProgramSlot.getStartDateTime()) && endDateTime.isBefore(existingProgramSlot.getStartDateTime()))||(programSlot.getStartDateTime().isAfter(existingEndDateTime) && endDateTime.isAfter(existingEndDateTime)))) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 }
