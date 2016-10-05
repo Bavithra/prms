@@ -23,6 +23,7 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
  */
 public class ScheduleService {
 
+    ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
     /**
      * ********************************
      */
@@ -54,7 +55,6 @@ public class ScheduleService {
     /**
      * ********************************
      */
-    
     /**
      * Method to create a new annual schedule.
      *
@@ -74,9 +74,9 @@ public class ScheduleService {
      */
     public void processCreateProgramSlot(ProgramSlot valueObject) throws SQLException, ProgramSlotExistsException {
         // Here we need to check if a program slot already exists with the same time
-        if(checkProgramSlotOverlaps(valueObject)) {
+        if (checkProgramSlotOverlaps(valueObject)) {
             throw new ProgramSlotExistsException("This program slot is already assigned");
-        }else {
+        } else {
             scheduleDAO.create(valueObject);
         }
     }
@@ -90,12 +90,12 @@ public class ScheduleService {
      * @throws SQLException If something went wrong during the modification.
      */
     public void processUpdateProgramSlot(ProgramSlot valueObject) throws NotFoundException, SQLException, ProgramSlotExistsException {
-        if(checkProgramSlotOverlaps(valueObject)) {
+        if (checkProgramSlotOverlaps(valueObject)) {
             throw new ProgramSlotExistsException("This program slot is already assigned");
-        }else {
+        } else {
             scheduleDAO.save(valueObject);
         }
-        
+
     }
 
     /**
@@ -113,6 +113,7 @@ public class ScheduleService {
     /**
      * Method to delete the upcoming schedules attached to a radio program. Only
      * the upcoming schedules are deleted, and not the past ones.
+     *
      * @param name The name of the radio program for which the schedules need to
      * be deleted.
      */
@@ -136,25 +137,26 @@ public class ScheduleService {
      * @param programSlot The program slot that needs to be checked.
      * @return True if there is an overlap, else false.
      */
-    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws SQLException {
-        if(programSlot != null) {
+    public boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws SQLException {
+        if (programSlot != null) {
             // Get all the existing program slots & run the loop
-            ReviewSelectScheduleService reviewSelectScheduleService = new ReviewSelectScheduleService();
-            for(ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
-                
+            for (ProgramSlot existingProgramSlot : reviewSelectScheduleService.reviewSelectSchedule()) {
+
                 LocalDateTime existingEndDateTime = existingProgramSlot.getStartDateTime().plusHours(existingProgramSlot.getRadioProgram().getTypicalDuration().getHours());
                 existingEndDateTime = existingEndDateTime.plusMinutes(existingProgramSlot.getRadioProgram().getTypicalDuration().getMinutes());
-                
+
                 LocalDateTime endDateTime = programSlot.getStartDateTime().plusHours(programSlot.getRadioProgram().getTypicalDuration().getHours());
                 endDateTime = endDateTime.plusMinutes(programSlot.getRadioProgram().getTypicalDuration().getMinutes());
-                
-                if((programSlot.getStartDateTime().isBefore(existingEndDateTime) || programSlot.getStartDateTime().isEqual(existingEndDateTime)) && 
-                        (endDateTime.isAfter(existingEndDateTime) || endDateTime.isEqual(existingEndDateTime))) {
-                    return true;
+
+//                if((programSlot.getStartDateTime().isBefore(existingEndDateTime) || programSlot.getStartDateTime().isEqual(existingEndDateTime)) && 
+//                        (endDateTime.isAfter(existingEndDateTime) || endDateTime.isEqual(existingEndDateTime))) {
+//                    return true;
+//                }
+                if ((programSlot.getStartDateTime().isBefore(existingProgramSlot.getStartDateTime()) && endDateTime.isBefore(existingProgramSlot.getStartDateTime()))||(programSlot.getStartDateTime().isAfter(existingEndDateTime) && endDateTime.isAfter(existingEndDateTime))) {
+                    return false;
                 }
             }
         }
-        // Return the value accordingly
-            return false;
+        return true;
     }
 }

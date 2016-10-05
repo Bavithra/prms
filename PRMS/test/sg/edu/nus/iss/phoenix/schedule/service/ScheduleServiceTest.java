@@ -5,7 +5,6 @@
  */
 package sg.edu.nus.iss.phoenix.schedule.service;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDateTime;
@@ -18,14 +17,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 import org.mockito.MockitoAnnotations;
 import sg.edu.nus.iss.phoenix.authenticate.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.dao.ScheduleDAO;
 import sg.edu.nus.iss.phoenix.schedule.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.schedule.entity.Year;
 
 /**
  *
@@ -34,9 +34,11 @@ import sg.edu.nus.iss.phoenix.schedule.entity.Year;
 public class ScheduleServiceTest {
 
     @Mock
-    ScheduleService scheduleService;
-    @Mock
     ReviewSelectScheduleService rsService;
+    @Mock
+    ScheduleDAO scheduleDao;
+    @InjectMocks
+    ScheduleService scheduleService;
 
     public ScheduleServiceTest() {
     }
@@ -68,6 +70,7 @@ public class ScheduleServiceTest {
         programSlot.setProducer(producer);
         List<ProgramSlot> list = new ArrayList<>();
         list.add(programSlot);
+//        stub(rsService.reviewSelectSchedule()).toReturn(list);
         Mockito.when(rsService.reviewSelectSchedule()).thenReturn(list);
     }
 
@@ -86,10 +89,10 @@ public class ScheduleServiceTest {
         radioProgram.setAll("TestProgram", "TestDescription", Time.valueOf("00:30:00"));
         programSlot.setRadioProgram(radioProgram);
         //test
-        assertEquals(checkProgramSlotOverlaps(programSlot), false);
+        assertEquals(scheduleService.checkProgramSlotOverlaps(programSlot), true);
         Mockito.verify(rsService).reviewSelectSchedule();
     }
-
+    
     @Test
     public void testCheckOverlapBoundry() throws Exception {
         System.out.println("testCheckOverlapBoundry");
@@ -101,7 +104,7 @@ public class ScheduleServiceTest {
         radioProgram.setAll("TestProgram", "TestDescription", Time.valueOf("00:30:00"));
         programSlot.setRadioProgram(radioProgram);
         //test
-        assertEquals(checkProgramSlotOverlaps(programSlot), false);
+        assertEquals(scheduleService.checkProgramSlotOverlaps(programSlot), true);
         Mockito.verify(rsService).reviewSelectSchedule();
     }
 
@@ -116,27 +119,8 @@ public class ScheduleServiceTest {
         radioProgram.setAll("TestProgram", "TestDescription", Time.valueOf("01:30:00"));
         programSlot.setRadioProgram(radioProgram);
         //test
-        assertEquals(checkProgramSlotOverlaps(programSlot), true);
+        assertEquals(scheduleService.checkProgramSlotOverlaps(programSlot), true);
         Mockito.verify(rsService).reviewSelectSchedule();
-    }
-
-    private boolean checkProgramSlotOverlaps(ProgramSlot programSlot) throws SQLException {
-        if (programSlot != null) {
-            for (ProgramSlot existingProgramSlot : rsService.reviewSelectSchedule()) {
-
-                LocalDateTime existingEndDateTime = existingProgramSlot.getStartDateTime().plusHours(existingProgramSlot.getRadioProgram().getTypicalDuration().getHours());
-                existingEndDateTime = existingEndDateTime.plusMinutes(existingProgramSlot.getRadioProgram().getTypicalDuration().getMinutes());
-
-                LocalDateTime endDateTime = programSlot.getStartDateTime().plusHours(programSlot.getRadioProgram().getTypicalDuration().getHours());
-                endDateTime = endDateTime.plusMinutes(programSlot.getRadioProgram().getTypicalDuration().getMinutes());
-
-                if ((programSlot.getStartDateTime().isBefore(existingEndDateTime) || programSlot.getStartDateTime().isEqual(existingEndDateTime))
-                        && (endDateTime.isAfter(existingEndDateTime) || endDateTime.isEqual(existingEndDateTime))) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 }

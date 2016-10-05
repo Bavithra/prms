@@ -12,7 +12,7 @@ import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectPresenterDelegateTes
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectProducerDelegateTest;
 import sg.edu.nus.iss.phoenix.schedule.delegate.ReviewSelectScheduleDelegateTest;
 import sg.edu.nus.iss.phoenix.schedule.service.ScheduleServiceTest;
-import sg.edu.nus.iss.phoenix.user.delegate.UserDelegateTest;
+import sg.edu.nus.iss.phoenix.user.service.UserServiceTest;
 
 /**
  *
@@ -20,7 +20,7 @@ import sg.edu.nus.iss.phoenix.user.delegate.UserDelegateTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ ReviewSelectPresenterDelegateTest.class, ReviewSelectProducerDelegateTest.class, ReviewSelectScheduleDelegateTest.class,
-		ScheduleServiceTest.class, UserDelegateTest.class })
+		ScheduleServiceTest.class, UserServiceTest.class })
 public class AllTests {
 
 }
